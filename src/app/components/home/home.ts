@@ -1,0 +1,32 @@
+import { Component, inject } from '@angular/core';
+import { Login } from '../login/login';
+import { Employee } from '../../services/employee';
+import { ActivatedRoute, Router } from '@angular/router';
+
+@Component({
+	selector: 'app-home',
+	imports: [
+		Login,
+	],
+	templateUrl: './home.html',
+	styleUrl: './home.scss',
+})
+export class Home {
+
+	private router = inject(Router);
+	employeeService = inject(Employee);
+
+	onLogin(auth: { name: string; surname: string; }) {
+		this.employeeService.getEmployeeByName(auth.name, auth.surname)
+			.subscribe({
+				next: (employee) => {
+					console.log("Accesso riuscito!");
+					this.router.navigate(['/dashboard']);
+				},
+				error: () => {
+					console.error("Accesso negato");
+				}
+			});
+	}
+
+}

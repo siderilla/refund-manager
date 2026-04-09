@@ -1,0 +1,7 @@
+<form [formGroup]="loginForm">
+	<label for="name">Nome:</label>
+	<input id="name" type="text" formControlName="name">
+	<label for="surname">Cognome</label>
+	<input id="surname" type="text" formControlName="surname">
+	<button type="submit" (click)="onSubmitAuth()">Accedi</button>
+</form>
