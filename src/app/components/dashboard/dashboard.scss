@@ -1,0 +1,25 @@
+.dashboard-container {
+	display: grid;
+	grid-template-columns: auto;
+	grid-template-areas: 
+	"sidebar welcome welcome logout"
+	"sidebar view view view"
+	"sidebar view view view"
+	"sidebar view view view"
+}
+
+.welcome-name {
+	grid-area: welcome;
+}
+
+.logout {
+	grid-area: logout;
+}
+
+.sidebar {
+	grid-area: sidebar;
+}
+
+.view {
+	grid-area: view;
+}
