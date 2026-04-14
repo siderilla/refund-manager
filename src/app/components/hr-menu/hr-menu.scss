@@ -1,0 +1,22 @@
+.container-hr-menu {
+	display: flex;
+	flex-direction: column;
+}
+
+button {
+	padding: 5px 20px;
+	cursor: pointer;
+	border: none;
+	border-radius: 10px;
+	padding: 10px 15px;
+	outline: none;
+	transition-duration: 0.4s;
+	background-color: rgb(106, 174, 253);
+	color: white;
+	margin: 10px;
+}
+
+button:hover {
+	background-color: rgb(12, 109, 255);
+	color: white;
+}

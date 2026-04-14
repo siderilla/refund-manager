@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Login } from '../login/login';
 import { Employee } from '../../services/employee';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-home',
@@ -21,6 +21,7 @@ export class Home {
 			.subscribe({
 				next: (employee) => {
 					console.log("Accesso riuscito!");
+					localStorage.setItem('employee', JSON.stringify(employee));
 					this.router.navigate(['/dashboard']);
 				},
 				error: () => {
@@ -28,5 +29,7 @@ export class Home {
 				}
 			});
 	}
+
+	
 
 }

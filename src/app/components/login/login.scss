@@ -1,0 +1,58 @@
+.background {
+	background-color: rgb(249, 249, 249);
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+}
+
+.container {
+	padding: 40px;
+	max-width: 300px;
+	margin: auto;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.title-login {
+	font-size: 25px;
+	color: #007bff;
+	margin: auto;
+}
+
+input {
+	background-color: rgb(247, 247, 247);
+	border: 0.5px rgb(241, 241, 241) solid;
+	border-radius: 10px;
+	padding: 10px 15px;
+	box-sizing: border-box;
+	outline: none;
+	margin: 0;
+}
+
+input:focus {
+	border-color: #007bff;
+	background-color: white;
+	box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+button {
+	padding: 5px 20px;
+	cursor: pointer;
+	border: none;
+	border-radius: 10px;
+	padding: 10px 15px;
+	outline: none;
+	transition-duration: 0.4s;
+	background-color: rgb(106, 174, 253);
+	color: white;
+	margin: 0;
+}
+
+button:hover {
+	background-color: rgb(12, 109, 255);
+	color: white;
+}

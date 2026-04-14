@@ -1,7 +1,12 @@
-<form [formGroup]="loginForm">
-	<label for="name">Nome:</label>
-	<input id="name" type="text" formControlName="name">
-	<label for="surname">Cognome</label>
-	<input id="surname" type="text" formControlName="surname">
-	<button type="submit" (click)="onSubmitAuth()">Accedi</button>
-</form>
+<div class="background">
+	<div class="container">
+		<form [formGroup]="loginForm">
+			<div class="title-login">
+				LOG IN
+			</div>
+			<input id="name" type="text" formControlName="name" placeholder="Nome">
+			<input id="surname" type="text" formControlName="surname" placeholder="Cognome">
+			<button type="submit" (click)="onSubmitAuth()">Log In</button>
+		</form>
+	</div>
+</div>
