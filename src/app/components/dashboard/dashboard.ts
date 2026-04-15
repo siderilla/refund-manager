@@ -2,15 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { Employee } from '../../services/employee';
 import { EmployeeOutputDto } from '../../models/employee';
 import { Sidebar } from '../sidebar/sidebar';
-import { View } from "../view/view";
 import { WelcomeName } from "../welcome-name/welcome-name";
 import { Logout } from "../logout/logout";
+import { View as ViewType } from '../../models/view';
+import { RequestView } from '../request-view/request-view';
 
 @Component({
 	selector: 'app-dashboard',
 	imports: [
 		Sidebar,
-		View,
+		RequestView,
 		WelcomeName,
 		Logout
 	],
@@ -20,6 +21,7 @@ import { Logout } from "../logout/logout";
 export class Dashboard implements OnInit {
 
 	employee: EmployeeOutputDto | null = null;
+	activeView: ViewType | undefined = undefined;
 
 	get isHR(): boolean {
 		return this.employee?.role === 'Investigatore privato';
@@ -31,6 +33,10 @@ export class Dashboard implements OnInit {
 			this.employee = JSON.parse(data);
 		}
 
+	}
+
+	onViewSelected(event: ViewType) {
+		this.activeView = event;
 	}
 
 }

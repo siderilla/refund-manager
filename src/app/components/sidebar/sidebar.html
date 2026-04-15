@@ -1,4 +1,20 @@
 <div class="sidebar-container">
-	<app-employee-menu></app-employee-menu>
-	<app-hr-menu></app-hr-menu>
+	
+	<div class="logo">
+		<i class="fa-solid fa-people-roof" style="color: rgb(0, 102, 212);"></i>
+	</div>
+
+	<app-employee-menu 
+		(viewSelected)="onViewSelected($event)"
+		[currentActive]="activeView()?.type">
+	</app-employee-menu>
+
+	@if (isHR()) {
+
+	<app-hr-menu 
+		(viewSelected)="onViewSelected($event)"
+		[currentActive]="activeView()?.type">
+	</app-hr-menu>
+
+	}
 </div>

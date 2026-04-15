@@ -11,6 +11,11 @@
 	margin: auto;
 }
 
+.logo {
+	text-align: center;
+	font-size: 50px;
+}
+
 form {
 	display: flex;
 	flex-direction: column;
@@ -18,7 +23,6 @@ form {
 }
 
 .title-login {
-	font-size: 25px;
 	color: #007bff;
 	margin: auto;
 }

@@ -1,5 +1,5 @@
-import { Component, output } from '@angular/core';
-import { View } from '../view/view';
+import { Component, input, output } from '@angular/core';
+import { View } from '../../models/view';
 
 @Component({
 	selector: 'app-employee-menu',
@@ -9,10 +9,11 @@ import { View } from '../view/view';
 })
 export class EmployeeMenu {
 
-	submitView = output<View>();
+	viewSelected = output<View>();
+	currentActive = input<string>();
 
-	onViewClick(view: View) {
-		this.submitView.emit({ type: view })
+	onMenuClick(view: View['type']) {
+		this.viewSelected.emit({ type: view })
 	}
 
 

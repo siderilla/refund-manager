@@ -1,6 +1,11 @@
 <div class="dashboard-container">
-	<app-welcome-name class="welcome-name"></app-welcome-name>
+	<app-welcome-name class="welcome-name" [userName]="employee?.name"></app-welcome-name>
 	<app-logout class="logout"></app-logout>
-	<app-sidebar class="sidebar"></app-sidebar>
-	<app-view class="view"></app-view>
+	<app-sidebar class="sidebar" 
+		(viewSelected)="onViewSelected($event)" 
+		[isHR]="isHR"
+		[activeView]="activeView"></app-sidebar>
+	<app-request-view class="view" [activeView]="activeView"></app-request-view>
 </div>
+
+<!-- https://dribbble.com/shots/25773050-Efficio-HR-Management-Dashboard -->

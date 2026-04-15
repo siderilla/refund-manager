@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, input, output } from '@angular/core';
+import { View } from '../../models/view';
 
 @Component({
 	selector: 'app-hr-menu',
@@ -7,7 +8,12 @@ import { Component } from '@angular/core';
 	styleUrl: './hr-menu.scss',
 })
 export class HrMenu {
-onViewHrClick(arg0: string) {
-throw new Error('Method not implemented.');
-}
+
+	viewSelected = output<View>();
+	currentActive = input<string>();
+
+	onMenuHrClick(view: View['type']) {
+		this.viewSelected.emit({ type: view });
+	}
+
 }

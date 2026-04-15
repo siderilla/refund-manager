@@ -1,5 +1,20 @@
 <div class="container-hr-menu">
-	<button (click)="onViewHrClick('pending-requests')">Richieste in attesa</button>
-	<button (click)="onViewHrClick('all-requests-list')">Archivio</button>
-	<button (click)="onViewHrClick('all-requests-list')">Panoramica & Spese</button>
+	<h4>Area HR</h4>
+	<button (click)="onMenuHrClick('requests-pending')" 
+		[class.active]="currentActive() === 'requests-pending'">
+		<i class="fa-solid fa-clock"></i>
+		<p>Richieste in attesa</p>
+	</button>
+
+	<button (click)="onMenuHrClick('requests-archive')"
+	[class.active]="currentActive() === 'requests-archive'">
+		<i class="fa-solid fa-box-archive"></i>
+		<p>Archivio</p>
+	</button>
+
+	<button (click)="onMenuHrClick('requests-analytics')"
+	[class.active]="currentActive() === 'requests-analytics'">
+		<i class="fa-solid fa-chart-bar"></i>
+		<p>Panoramica</p>
+	</button>
 </div>

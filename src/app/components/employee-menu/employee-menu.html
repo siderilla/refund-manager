@@ -1,5 +1,20 @@
 <div class="container-employee-menu">
-	<button (click)="onViewClick('requests-list')">Le mie richieste</button>
-	<button (click)="onViewClick('request-form')">Nuova richiesta</button>
-	<button (click)="onViewClick('requests-summary')">Riepilogo</button>
+	<h4>Area Personale</h4>
+	<button (click)="onMenuClick('my-requests-list')"
+		[class.active]="currentActive() === 'my-requests-list'">
+		<i class="fa-solid fa-list"></i>
+		<p>Le mie richieste</p>
+	</button>
+
+	<button (click)="onMenuClick('request-form')"
+	[class.active]="currentActive() === 'request-form'">
+		<i class="fa-solid fa-plus"></i>
+		<p>Nuova richiesta</p>
+	</button>
+
+	<button (click)="onMenuClick('my-requests-summary')"
+	[class.active]="currentActive() === 'my-requests-summary'">
+		<i class="fa-solid fa-chart-pie"></i>
+		<p>Riepilogo</p>
+	</button>
 </div>
