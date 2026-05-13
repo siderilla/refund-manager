@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-logout',
@@ -6,4 +7,16 @@ import { Component } from '@angular/core';
 	templateUrl: './logout.html',
 	styleUrl: './logout.scss',
 })
-export class Logout {}
+export class Logout {
+
+	private router = inject(Router);
+
+	context = input<'dashboard' | 'sidebar'>('dashboard');
+
+	onLogoutClick() {
+		console.log("Sloggato");
+		sessionStorage.clear();
+		this.router.navigate(['']);
+	}
+
+}

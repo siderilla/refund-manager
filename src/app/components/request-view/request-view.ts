@@ -3,9 +3,7 @@ import { View as ViewType } from '../../models/view';
 import { RequestsList } from "../requests-list/requests-list";
 import { RequestForm } from "../request-form/request-form";
 import { RequestsSummary } from "../requests-summary/requests-summary";
-import { RequestsPending } from '../requests-pending/requests-pending';
-import { RequestsArchive } from '../requests-archive/requests-archive';
-import { RequestsAnalytics } from '../requests-analytics/requests-analytics';
+import { EmployeeOutputDto } from '../../models/employee-output';
 
 @Component({
 	selector: 'app-request-view',
@@ -13,9 +11,6 @@ import { RequestsAnalytics } from '../requests-analytics/requests-analytics';
 		RequestsList,
 		RequestForm,
 		RequestsSummary,
-		RequestsPending,
-		RequestsArchive,
-		RequestsAnalytics
 	],
 	templateUrl: './request-view.html',
 	styleUrl: './request-view.scss',
@@ -23,5 +18,7 @@ import { RequestsAnalytics } from '../requests-analytics/requests-analytics';
 export class RequestView {
 
 	activeView = input<ViewType>();
+	employee = input<EmployeeOutputDto>();
+	isHR = input<boolean | undefined>();
 
 }

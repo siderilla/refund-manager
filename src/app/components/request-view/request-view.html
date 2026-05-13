@@ -1,13 +1,41 @@
 @if (activeView()?.type === 'my-requests-list') {
-	<app-requests-list></app-requests-list>
+
+	<app-requests-list
+		[activeView]="activeView()"
+        [employee]="employee()"
+		[isHR]="isHR()"></app-requests-list>
+
 } @else if (activeView()?.type === 'request-form') {
-	<app-request-form></app-request-form>
+
+	<app-request-form
+		[employee]="employee()">
+	</app-request-form>
+
 } @else if (activeView()?.type === 'my-requests-summary') {
-	<app-requests-summary></app-requests-summary>
+
+	<app-requests-summary
+		[employee]="employee()">
+	</app-requests-summary>
+
 } @else if (activeView()?.type === 'requests-pending') {
-	<app-requests-pending></app-requests-pending>
+
+	<app-requests-list
+		[activeView]="activeView()"
+        [employee]="employee()"
+		[isHR]="isHR()">
+	</app-requests-list>
+
 } @else if (activeView()?.type === 'requests-archive') {
-	<app-requests-archive></app-requests-archive>
+
+	<app-requests-list
+		[activeView]="activeView()"
+        [employee]="employee()"
+		[isHR]="isHR()"></app-requests-list>
+
 } @else if (activeView()?.type === 'requests-analytics') {
-	<app-requests-analytics></app-requests-analytics>
+
+	<app-requests-summary
+		[employee]="employee()">
+	</app-requests-summary>
+
 }

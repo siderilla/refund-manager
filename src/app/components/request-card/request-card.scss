@@ -1,0 +1,46 @@
+.card {
+	display: grid;
+	grid-template-columns: 1.5fr 1fr 1fr 1fr 2fr;
+	padding: 5px 5px 5px 20px;
+	border-bottom: 1px solid #eee;
+	align-items: center;
+}
+
+.card.show-employee {
+	grid-template-columns: 1.5fr 1fr 1.5fr 1fr 1fr 2fr;
+}
+
+.status-chip {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    width: fit-content;
+}
+
+.status-approved {
+    background-color: #e6f4ea;
+    color: #1e7e34;
+    border: 1px solid #1e7e34;
+}
+
+.status-pending {
+    background-color: #fff4e5;
+    color: #b05d00;
+    border: 1px solid #b05d00;
+}
+
+.status-rejected {
+    background-color: #fce8e8;
+    color: #d93025;
+    border: 1px solid #d93025;
+}
+
+.description p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}

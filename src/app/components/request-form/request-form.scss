@@ -1,0 +1,95 @@
+.form-container {
+	margin: 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    border: 1px solid rgb(241, 241, 241);
+	padding: 30px;
+}
+
+.form-header {
+	color: #007bff;
+	margin: auto;
+	text-align: center;
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-bottom: 20px;
+
+	label {
+		font-weight: 600;
+		color: #444;
+		font-size: 0.9rem;
+	}
+}
+
+.row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px;
+}
+
+.receipt-radio {
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 10px;
+}
+
+input,
+select,
+textarea {
+	background-color: rgb(247, 247, 247);
+	border: 1px solid rgb(230, 230, 230);
+	border-radius: 10px;
+	padding: 12px;
+	outline: none;
+	transition: all 0.3s ease;
+
+	&:focus {
+		border-color: #007bff;
+		background-color: white;
+		box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+	}
+}
+
+.form-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 15px;
+	margin-top: 20px;
+}
+
+button {
+	padding: 10px 25px;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: 0.3s;
+	border: none;
+}
+
+.btn-primary {
+	background-color: rgb(106, 174, 253);
+	color: white;
+
+	&:hover:not(:disabled) {
+		background-color: rgb(12, 109, 255);
+	}
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}
+
+.btn-secondary {
+	background-color: #eee;
+	color: #666;
+
+	&:hover {
+		background-color: #ddd;
+	}
+}

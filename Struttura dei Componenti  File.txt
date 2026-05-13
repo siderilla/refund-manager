@@ -1,0 +1,35 @@
+Struttura dei Componenti / File
+
+home.ts
+│
+├── login.ts
+│   ├── Input: nome
+│   └── Input: cognome
+│
+└── dashboard.ts
+    │
+    ├── Top Bar (Header)
+    │   ├── welcome-name.ts
+    │   └── logout.ts (button)
+    │
+    ├── sidebar.ts (Menu Laterale)
+    │   ├── employee-menu.ts
+    │   │   ├── requests-list -> my-requests-list
+    │   │   ├── request-form
+    │   │   └── requests-summary -> personal request recap
+    │   │
+    │   └── hr-menu.ts
+    │        ├── requests-list -> requests-pending
+│        ├── requests-list -> requests-archive
+│        └── requests-summary -> global corporate request recap ?
+    │
+    └── request-view (Alternanza tra: requests-list.ts / request-form.ts / request-summary.ts)
+        │
+        └── req	uests-list-action
+            ├── Filtro: status
+            ├── Filtro: date
+            ├── Filtro: priority ?
+            ├── Filtro: amount
+            └── Filtro: category (alphabetical order)
+            │
+            └── [Lista dei Risultati / Righe dati]

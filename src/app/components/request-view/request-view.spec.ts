@@ -4,7 +4,7 @@ import { RequestView } from './request-view';
 
 describe('View', () => {
 	let component: RequestView;
-	let fixture: ComponentFixture<View>;
+	let fixture: ComponentFixture<RequestView>;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({

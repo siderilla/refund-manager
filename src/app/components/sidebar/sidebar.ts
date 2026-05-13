@@ -2,13 +2,15 @@ import { Component, input, output } from '@angular/core';
 import { EmployeeMenu } from "../employee-menu/employee-menu";
 import { HrMenu } from "../hr-menu/hr-menu";
 import { View } from '../../models/view';
+import { Logout } from "../logout/logout";
 
 @Component({
 	selector: 'app-sidebar',
 	imports: [
-		EmployeeMenu,
-		HrMenu
-	],
+    EmployeeMenu,
+    HrMenu,
+    Logout
+],
 	templateUrl: './sidebar.html',
 	styleUrl: './sidebar.scss',
 })

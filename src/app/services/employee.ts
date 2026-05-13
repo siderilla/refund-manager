@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { EmployeeOutputDto } from '../models/employee';
+import { EmployeeOutputDto } from '../models/employee-output';
 
 @Injectable({
 	providedIn: 'root',
 })
-export class Employee {
+export class EmployeeService {
 
 	private http = inject(HttpClient);
 	private baseUrl = 'https://localhost:7258/api';

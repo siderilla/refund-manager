@@ -1,1 +1,21 @@
-<p>requests-list works!</p>
+<div class="list-container">
+	<ag-grid-angular
+		style="width: 100%; height: 600px;"
+		class="ag-theme-material"
+		[rowData]="outlays()"
+		[columnDefs]="colDefs"
+		[defaultColDef]="defaultColDef"
+		[pagination]="true"
+		[paginationPageSize]="15">
+	</ag-grid-angular>
+</div>
+
+<!-- <div class="list-container">
+	@if (outlays().length === 0) {
+	<p>Nessuna spesa trovata in questa sezione.</p>
+	} @else {
+	@for (outlay of outlays(); track outlay.id) {
+	<app-request-card [outlay]="outlay" [activeView]="activeView()"></app-request-card>
+	}
+	}
+</div> -->

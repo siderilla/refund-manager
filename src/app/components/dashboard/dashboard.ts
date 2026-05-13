@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Employee } from '../../services/employee';
-import { EmployeeOutputDto } from '../../models/employee';
+import { EmployeeOutputDto } from '../../models/employee-output';
 import { Sidebar } from '../sidebar/sidebar';
 import { WelcomeName } from "../welcome-name/welcome-name";
 import { Logout } from "../logout/logout";
@@ -20,7 +19,7 @@ import { RequestView } from '../request-view/request-view';
 })
 export class Dashboard implements OnInit {
 
-	employee: EmployeeOutputDto | null = null;
+	employee: EmployeeOutputDto | undefined = undefined;
 	activeView: ViewType | undefined = undefined;
 
 	get isHR(): boolean {
@@ -28,11 +27,12 @@ export class Dashboard implements OnInit {
 	}
 
 	ngOnInit() {
-		const data = localStorage.getItem('employee');
+		const data = sessionStorage.getItem('employee'); 
 		if (data) {
 			this.employee = JSON.parse(data);
 		}
 
+		this.activeView = { type: 'my-requests-list'}; // la view attiva di default subito dopo il login 
 	}
 
 	onViewSelected(event: ViewType) {

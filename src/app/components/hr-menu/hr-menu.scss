@@ -1,11 +1,11 @@
 .container-hr-menu {
 	display: flex;
 	flex-direction: column;
-	margin-top: 100px;
+	margin-top: 20%;
 }
 
 h4 {
-	margin: 20px;
+	margin: 0px 0px 20px 20px;
 	color: rgb(51, 51, 51);
 }
 
@@ -16,7 +16,7 @@ button {
 	cursor: pointer;
 	border-right: 4px solid transparent;
 	border: none;
-	padding: 20px 25px;
+	padding: 15px 20px;
 	outline: none;
 	color: rgb(51, 51, 51);
 	text-align: left;

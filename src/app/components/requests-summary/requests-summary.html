@@ -1,1 +1,37 @@
-<p>requests-summary works!</p>
+<div class="summary-grid">
+	<div class="area-status">
+		<app-widget-budgetstatus></app-widget-budgetstatus>
+	</div>
+	<div class="area-calendar">
+		<app-widget-calendar></app-widget-calendar>
+	</div>
+	<div class="area-charts">
+		<app-widget-colcharts></app-widget-colcharts>
+	</div>
+	<div class="area-detail">
+		<app-widget-outlaydetail></app-widget-outlaydetail>
+	</div>
+</div>
+
+
+<!-- <div class="summary-grid">
+	@for (item of budgetSummary(); track item.categoryName) {
+	<div>
+		<div>
+			<h3>{{ item.categoryName }}</h3>
+			<span>Oggi: {{ item.spentToday }}€ / {{ item.dailyBudget }}€</span>
+		</div>
+
+		<div>
+			<div>
+				<span>Speso nel mese: </span>
+				<span>{{ item.spentMonth }}€ / {{ item.monthlyBudget }}€</span>
+			</div>
+
+			<div>
+				<p>Residuo mese: <strong>{{ item.monthlyLeft }}€</strong></p>
+			</div>
+		</div>
+	</div>
+	}
+</div> -->

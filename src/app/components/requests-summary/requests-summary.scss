@@ -1,0 +1,46 @@
+.summary-grid {
+	display: grid;
+	height: calc(100vh - 100px);
+	padding: 20px;
+	gap: 20px;
+
+	grid-template-columns: 2fr 1.5fr 1.5fr;
+	grid-template-rows: 1fr 1.5fr;
+
+	grid-template-areas:
+		"status   charts  detail"
+		"calendar charts  detail";
+}
+
+.area-status {
+	grid-area: status;
+	background: white;
+	border-radius: 16px;
+}
+
+.area-calendar {
+	grid-area: calendar;
+	background: white;
+	border-radius: 16px;
+}
+
+.area-charts {
+	grid-area: charts;
+	background: white;
+	border-radius: 16px;
+}
+
+.area-detail {
+	grid-area: detail;
+	background: white;
+	border-radius: 16px;
+}
+
+.area-status,
+.area-calendar,
+.area-charts,
+.area-detail {
+	border: 0.5px rgb(241, 241, 241) solid;
+	padding: 15px;
+	overflow: hidden;
+}

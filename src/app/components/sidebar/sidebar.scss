@@ -5,10 +5,16 @@
 	height: 100vh;
 	background-color: rgb(249, 249, 249);
 	border: 0.5px rgb(241, 241, 241) solid;
+	align-content: space-around;
 }
 
 .logo {
-	margin: 20px;
+	margin-top: 20px;
 	text-align: center;
 	font-size: 50px;
+}
+
+.logout {
+	margin-top: auto;
+	margin-bottom: 10px;
 }

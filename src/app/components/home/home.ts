@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Login } from '../login/login';
-import { Employee } from '../../services/employee';
+import { EmployeeService } from '../../services/employee';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,14 +14,14 @@ import { Router } from '@angular/router';
 export class Home {
 
 	private router = inject(Router);
-	employeeService = inject(Employee);
+	employeeService = inject(EmployeeService);
 
 	onLogin(auth: { name: string; surname: string; }) {
 		this.employeeService.getEmployeeByName(auth.name, auth.surname)
 			.subscribe({
 				next: (employee) => {
 					console.log("Accesso riuscito!");
-					localStorage.setItem('employee', JSON.stringify(employee));
+					sessionStorage.setItem('employee', JSON.stringify(employee));
 					this.router.navigate(['/dashboard']);
 				},
 				error: () => {

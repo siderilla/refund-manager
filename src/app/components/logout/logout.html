@@ -1,1 +1,7 @@
-<p>logout works!</p>
+<div [class.logout-dashboard]="context() === 'dashboard'"
+     [class.logout-sidebar]="context() === 'sidebar'">
+	<button (click)="onLogoutClick()">
+		<p>Log Out</p>
+		<i class="fa-solid fa-right-from-bracket"></i>
+	</button>
+</div>
