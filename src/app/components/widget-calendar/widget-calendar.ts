@@ -1,87 +1,107 @@
-import { Component } from '@angular/core';
-import { NgApexchartsModule, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexPlotOptions, ApexDataLabels } from 'ng-apexcharts';
-
-export type ChartOptions = {
-	series: ApexAxisChartSeries;
-	chart: ApexChart;
-	dataLabels: ApexDataLabels;
-	fill: any;
-	colors: any;
-	title: any;
-	xaxis: ApexXAxis;
-	plotOptions: ApexPlotOptions;
-};
+import { Component, inject, input, OnInit } from '@angular/core';
+import { CalendarCellDto } from '../../models/calendar-cell';
+import { OutlaySummaryDto } from '../../models/outlay-summary';
+import { OutlayService } from '../../services/outlay';
+import { EmployeeOutputDto } from '../../models/employee-output';
 
 @Component({
 	selector: 'app-widget-calendar',
-	imports: [
-		NgApexchartsModule,
-	],
+	imports: [],
 	templateUrl: './widget-calendar.html',
 	styleUrl: './widget-calendar.scss',
 })
-export class WidgetCalendar {
+export class WidgetCalendar implements OnInit {
 
-	public chartOptions: Partial<ChartOptions>;
+	outlayService = inject(OutlayService);
 
-	constructor() {
-		this.chartOptions = {
-			series: [
-				// Ogni "name" è una riga (Settimana)
-				{ name: "Sett 4", data: this.generateData(7, { min: 0, max: 90 }) },
-				{ name: "Sett 3", data: this.generateData(7, { min: 0, max: 90 }) },
-				{ name: "Sett 2", data: this.generateData(7, { min: 0, max: 90 }) },
-				{ name: "Sett 1", data: this.generateData(7, { min: 0, max: 90 }) }
-			],
-			chart: {
-				height: 350,
-				type: "heatmap",
-				toolbar: { show: false },
-				events: {
-					// Fondamentale: qui catturiamo il click sul giorno!
-					dataPointSelection: (event, chartContext, config) => {
-						const val = config.w.config.series[config.seriesIndex].data[config.dataPointIndex];
-						console.log("Giorno selezionato:", val.x, "Valore spesa:", val.y);
-					}
-				}
+	isHR = input<boolean>();
+	employee = input<EmployeeOutputDto>();
+
+	cells: CalendarCellDto[] = [];
+	summary: OutlaySummaryDto[] = [];
+
+	today: Date = new Date;
+	month: number = new Date().getMonth();
+	year: number = new Date().getFullYear();
+
+	dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+	monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+	ngOnInit() {
+		this.outlayService.getCalendarSummary(this.employee()!.id, this.month, this.year, undefined).subscribe({
+			next: (data: any) => {
+				this.cells = data;
 			},
-			dataLabels: { enabled: true }, // Nascondiamo i numeri dentro i quadratini
-			colors: ["#008FFB"], // Colore base (il "calore" lo gestiamo dopo)
-			xaxis: {
-				type: "category",
-				categories: ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"]
-			},
-			plotOptions: {
-				heatmap: {
-					shadeIntensity: 0.5,
-					radius: 0, // 0 per quadrati, >0 per arrotondati (più moderni)
-					useFillColorAsStroke: true,
-					colorScale: {
-						ranges: [
-							{ from: 0, to: 0, name: 'Nessuna spesa', color: '#F3F4F6' },
-							{ from: 1, to: 30, name: 'Basso', color: '#DBEAFE' },
-							{ from: 31, to: 60, name: 'Medio', color: '#60A5FA' },
-							{ from: 61, to: 100, name: 'Alto', color: '#1D4ED8' }
-						]
-					}
-				}
-			}
-		};
+			error: () => console.error("errore nel caricamento delle celle")
+		})
 	}
 
-	// Funzione temporanea per generare numeri casuali
-	public generateData(count: number, yrange: any) {
-		let i = 0;
-		let series = [];
-		const days = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
-		while (i < count) {
-			series.push({
-				x: days[i],
-				y: Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min
-			});
-			i++;
+	generateCalendar(month: number, year: number) {
+		
+		const firstDayOfMonth = new Date(year, month, 1);
+		const nameFirstDay = firstDayOfMonth.getDay();
+		const offset = (firstDayOfMonth.getDay() + 6) % 7;
+		const currentMonthLength = new Date(year, month + 1, 0).getDate();
+		const lastMonthLenght = new Date(year, month, 0).getDate();
+
+		// blocco mese precedente
+		for (let i = offset; i > 0; i--) {
+			const day = lastMonthLenght - offset + i;
+			const cellDate = new Date(year, month - 1, day);
+
+			const cell: CalendarCellDto = {
+				date: cellDate,
+				isCurrentMonth: false,
+				isToday: false,
+				isSelected: false,
+				outlayAmount: 0,
+				refundAmount: 0,
+			}
+
+			this.cells.push(cell);
 		}
-		return series;
+
+		// blocco mese corrente
+		for (let i = 1; i <= currentMonthLength; i++) {
+			const cellDate = new Date(year, month, 1);
+			const today = new Date();
+			const isToday = cellDate.getDate() == today.getDate() &&
+							cellDate.getMonth() == today.getMonth() &&
+							cellDate.getFullYear() == today.getFullYear();
+			
+			const cell: CalendarCellDto = {
+				date: cellDate,
+				isCurrentMonth: true,
+				isToday: isToday,
+				isSelected: false,
+				outlayAmount: 0,
+				refundAmount: 0
+			}
+
+			this.cells.push(cell);
+			
+		}
+
+		// blocco mese successivo
+		const missingCells = 42 - this.cells.length;
+
+		for (let i = 1; i <= missingCells; i++) {
+			const cellDate = new Date(year, month + 1, i);
+
+			
+		}
+
+
+		return this.dayNames[nameFirstDay];
+
+	}
+
+	changeMonth() {
+
+	}
+
+	calculateCells() {
+
 	}
 
 }
