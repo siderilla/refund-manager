@@ -4,7 +4,7 @@ import { EmployeeOutputDto } from '../../models/employee-output';
 import { CategoryBudgetSummaryDto } from '../../models/category-budget-summary';
 import { WidgetBudgetstatus } from '../widget-budgetstatus/widget-budgetstatus';
 import { WidgetCalendar } from '../widget-calendar/widget-calendar';
-import { WidgetColcharts } from '../widget-colcharts/widget-colcharts';
+import { WidgetCharts } from '../widget-colcharts/widget-charts';
 import { WidgetOutlaydetail } from '../widget-outlaydetail/widget-outlaydetail';
 
 @Component({
@@ -12,7 +12,7 @@ import { WidgetOutlaydetail } from '../widget-outlaydetail/widget-outlaydetail';
 	imports: [
 		WidgetBudgetstatus,
 		WidgetCalendar,
-		WidgetColcharts,
+		WidgetCharts,
 		WidgetOutlaydetail
 	],
 	templateUrl: './requests-summary.html',

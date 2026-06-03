@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { CalendarCellDto } from '../../models/calendar-cell';
 import { OutlaySummaryDto } from '../../models/outlay-summary';
 import { OutlayService } from '../../services/outlay';
@@ -17,37 +17,42 @@ export class WidgetCalendar implements OnInit {
 	isHR = input<boolean>();
 	employee = input<EmployeeOutputDto>();
 
-	cells: CalendarCellDto[] = [];
+	cells = signal<CalendarCellDto[]>([]);
 	summary: OutlaySummaryDto[] = [];
 
 	today: Date = new Date;
 	month: number = new Date().getMonth();
 	year: number = new Date().getFullYear();
 
-	dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-	monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	displayMonth = this.month + 1;
+
+	// dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+	// monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 	ngOnInit() {
-		this.outlayService.getCalendarSummary(this.employee()!.id, this.month, this.year, undefined).subscribe({
-			next: (data: any) => {
-				this.cells = data;
-			},
-			error: () => console.error("errore nel caricamento delle celle")
-		})
+		this.outlayService.getCalendarSummary(this.employee()!.id,
+			this.displayMonth,
+			this.year,
+			undefined).subscribe({
+				next: (data: OutlaySummaryDto[]) => {
+					this.summary = data;
+					this.generateCalendar(this.month, this.year);
+				},
+				error: () => console.error("errore nel caricamento delle celle")
+			})
 	}
 
 	generateCalendar(month: number, year: number) {
-		
-		const firstDayOfMonth = new Date(year, month, 1);
-		const nameFirstDay = firstDayOfMonth.getDay();
-		const offset = (firstDayOfMonth.getDay() + 6) % 7;
+		const result: CalendarCellDto[] = [];
+
+		const firstDayOfMonth = new Date(year, month, 1); // getDay() of the week = 5 se è maggio
+		const offset = (firstDayOfMonth.getDay() + 6) % 7; // il primo giorno di maggio diventa 4
 		const currentMonthLength = new Date(year, month + 1, 0).getDate();
-		const lastMonthLenght = new Date(year, month, 0).getDate();
 
 		// blocco mese precedente
-		for (let i = offset; i > 0; i--) {
-			const day = lastMonthLenght - offset + i;
-			const cellDate = new Date(year, month - 1, day);
+		for (let i = 0; i < offset; i++) {
+			const day = currentMonthLength - offset + i;
+			const cellDate = this.formatDate(year, this.displayMonth - 1, day + 1);
 
 			const cell: CalendarCellDto = {
 				date: cellDate,
@@ -58,17 +63,21 @@ export class WidgetCalendar implements OnInit {
 				refundAmount: 0,
 			}
 
-			this.cells.push(cell);
+			result.push(cell)
 		}
 
 		// blocco mese corrente
 		for (let i = 1; i <= currentMonthLength; i++) {
-			const cellDate = new Date(year, month, 1);
+			const dateObj = new Date(year, month, i);
+
+			const cellDate = this.formatDate(year, this.displayMonth, i);
+
 			const today = new Date();
-			const isToday = cellDate.getDate() == today.getDate() &&
-							cellDate.getMonth() == today.getMonth() &&
-							cellDate.getFullYear() == today.getFullYear();
-			
+			const isToday = dateObj.getDate() == today.getDate() &&
+				dateObj.getMonth() == today.getMonth() &&
+				dateObj.getFullYear() == today.getFullYear();
+			console.log("la data: ", dateObj);
+
 			const cell: CalendarCellDto = {
 				date: cellDate,
 				isCurrentMonth: true,
@@ -78,30 +87,65 @@ export class WidgetCalendar implements OnInit {
 				refundAmount: 0
 			}
 
-			this.cells.push(cell);
-			
+			result.push(cell);
+
 		}
 
 		// blocco mese successivo
-		const missingCells = 42 - this.cells.length;
+		const missingCells = 42 - result.length;
 
 		for (let i = 1; i <= missingCells; i++) {
-			const cellDate = new Date(year, month + 1, i);
+			const cellDate = this.formatDate(year, this.displayMonth + 1, i);
 
-			
+			const cell: CalendarCellDto = {
+				date: cellDate,
+				isCurrentMonth: false,
+				isToday: false,
+				isSelected: false,
+				outlayAmount: 0,
+				refundAmount: 0
+			}
+
+			result.push(cell);
+
+			console.log(this.cells);
 		}
 
+		this.cells.set(result);
 
-		return this.dayNames[nameFirstDay];
+		// merge dei dati da db + heatmap
+		const currentMonthResult = result.filter(m => m.isCurrentMonth === true)
+
+		currentMonthResult.forEach(cell => {
+			const matchingData = this.summary.find(o => o.date === cell.date);
+			if (matchingData?.outlayAmount) {
+				cell.outlayAmount = matchingData.outlayAmount
+			}
+			if (matchingData?.refundAmount) {
+				cell.refundAmount = matchingData.refundAmount
+			}
+		});
+
+		const outlayAmountArray = currentMonthResult.map(o => o.outlayAmount);
+		return Math.max(...outlayAmountArray);
 
 	}
 
-	changeMonth() {
+	formatDate(year: number, month: number, day: number) {
+
+		const toStringYear = year.toString();
+		const toStringMonth = month.toString();
+		const toStringDay = day.toString();
+		const stringDate = toStringYear + "-" + toStringMonth.padStart(2, "0") + "-" + toStringDay.padStart(2, "0")
+
+		return stringDate;
+	}
+
+	heatmap() {
 
 	}
 
-	calculateCells() {
+	changeMonth() { // qui calcolo l'anno
 
 	}
-
 }

@@ -1,44 +1,7 @@
 <div class="calendar-container">
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
-	<div class="cell"></div>
+	@for (cell of cells(); track cell.date) {
+		<div class="cell" [class.cell-inactive]="!cell.isCurrentMonth">
+			{{ cell.outlayAmount }}
+		</div>
+	}
 </div>

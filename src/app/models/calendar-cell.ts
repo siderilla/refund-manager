@@ -1,6 +1,6 @@
 export interface CalendarCellDto {
 
-	date: Date;
+	date: string;
 	isCurrentMonth: boolean;
 	isToday: boolean;
 	isSelected: boolean;

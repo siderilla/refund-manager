@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WidgetColcharts } from './widget-colcharts';
+import { WidgetCharts } from './widget-charts';
 
-describe('WidgetColcharts', () => {
-	let component: WidgetColcharts;
-	let fixture: ComponentFixture<WidgetColcharts>;
+describe('WidgetCharts', () => {
+	let component: WidgetCharts;
+	let fixture: ComponentFixture<WidgetCharts>;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			imports: [WidgetColcharts],
+			imports: [WidgetCharts],
 		}).compileComponents();
 
-		fixture = TestBed.createComponent(WidgetColcharts);
+		fixture = TestBed.createComponent(WidgetCharts);
 		component = fixture.componentInstance;
 		await fixture.whenStable();
 	});
