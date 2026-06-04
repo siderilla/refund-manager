@@ -25,6 +25,7 @@ export class WidgetCalendar implements OnInit {
 	year: number = new Date().getFullYear();
 
 	displayMonth = this.month + 1;
+	maxOutlayAmount: number = 0;
 
 	// dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 	// monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -112,22 +113,25 @@ export class WidgetCalendar implements OnInit {
 		}
 
 		this.cells.set(result);
+		this.mergeData(result);
 
-		// merge dei dati da db + heatmap
-		const currentMonthResult = result.filter(m => m.isCurrentMonth === true)
+	}
 
-		currentMonthResult.forEach(cell => {
-			const matchingData = this.summary.find(o => o.date === cell.date);
-			if (matchingData?.outlayAmount) {
-				cell.outlayAmount = matchingData.outlayAmount
-			}
-			if (matchingData?.refundAmount) {
-				cell.refundAmount = matchingData.refundAmount
-			}
-		});
+	private mergeData(result: CalendarCellDto[]) {
 
-		const outlayAmountArray = currentMonthResult.map(o => o.outlayAmount);
-		return Math.max(...outlayAmountArray);
+		const currentCells = result.filter(c => c.isCurrentMonth);
+
+		currentCells.forEach(cell => {
+            const matchingData = this.summary.find(o => o.date === cell.date);
+            if (matchingData?.outlayAmount) {
+                cell.outlayAmount = matchingData.outlayAmount
+            }
+            if (matchingData?.refundAmount) {
+                cell.refundAmount = matchingData.refundAmount
+            }
+        });
+
+		this.maxOutlayAmount = Math.max(...currentCells.map(c => c.outlayAmount));
 
 	}
 
@@ -143,6 +147,10 @@ export class WidgetCalendar implements OnInit {
 
 	heatmap() {
 
+		const r = 255;
+		const g = 255;
+		const b = 255;
+		
 	}
 
 	changeMonth() { // qui calcolo l'anno
