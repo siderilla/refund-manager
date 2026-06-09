@@ -28,9 +28,18 @@ export class WidgetCalendar implements OnInit {
 	maxOutlayAmount: number = 0;
 
 	// dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-	// monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	monthName: string = this.monthNames[this.month]; // non si aggiorna, devo usare onChangeMonth per aggiornarlo
+
 
 	ngOnInit() {
+
+		this.getData();
+
+	}
+
+	getData() {
+
 		this.outlayService.getCalendarSummary(this.employee()!.id,
 			this.displayMonth,
 			this.year,
@@ -41,6 +50,7 @@ export class WidgetCalendar implements OnInit {
 				},
 				error: () => console.error("errore nel caricamento delle celle")
 			})
+
 	}
 
 	generateCalendar(month: number, year: number) {
@@ -122,14 +132,14 @@ export class WidgetCalendar implements OnInit {
 		const currentCells = result.filter(c => c.isCurrentMonth);
 
 		currentCells.forEach(cell => {
-            const matchingData = this.summary.find(o => o.date === cell.date);
-            if (matchingData?.outlayAmount) {
-                cell.outlayAmount = matchingData.outlayAmount
-            }
-            if (matchingData?.refundAmount) {
-                cell.refundAmount = matchingData.refundAmount
-            }
-        });
+			const matchingData = this.summary.find(o => o.date === cell.date);
+			if (matchingData?.outlayAmount) {
+				cell.outlayAmount = matchingData.outlayAmount
+			}
+			if (matchingData?.refundAmount) {
+				cell.refundAmount = matchingData.refundAmount
+			}
+		});
 
 		this.maxOutlayAmount = Math.max(...currentCells.map(c => c.outlayAmount));
 
@@ -145,15 +155,91 @@ export class WidgetCalendar implements OnInit {
 		return stringDate;
 	}
 
-	heatmap() {
+	getCellColor(outlayAmount: number, isCurrentMonth: boolean) {
 
-		const r = 255;
-		const g = 255;
-		const b = 255;
-		
+		// se la spesa è 0, ma guardiamo le celle del mese corrente, 
+		// restituisco il colore meno intenso possibile, nella scala del blu scelto
+		if (outlayAmount === 0 && isCurrentMonth) { return "rgb(220, 238, 255)" }
+
+		// se abbiamo delle spese e guardiamo il mese corrente, 
+		// restituisco una stringa costruita con i valori calcolati in base alla sfumatura 
+		// del blu scelto e la percentuale ottenuta dall'ammontare delle spese
+		if (isCurrentMonth) {
+
+			const value = outlayAmount / this.maxOutlayAmount * 100;
+
+			const r = 255 - (255 * value / 100);
+			const g = 255 - ((255 - 172) * value / 100);
+			const b = 255 - (0 * value / 100);
+
+			return "rgb(" + r + ", " + g + ", " + b + ")";
+
+		} else { return "rgb(245, 245, 245)"; }
 	}
 
-	changeMonth() { // qui calcolo l'anno
+	onChangeMonth(direction: number) {
+
+		this.month += direction;
+		this.displayMonth += direction;
+		this.monthName = this.monthNames[this.month];
+
+		if (this.month === 12) {
+
+			this.month = 0;
+			this.displayMonth = 1;
+			this.monthName = this.monthNames[this.month];
+
+		}
+
+		if (this.month === -1) {
+
+			this.month = 11;
+			this.displayMonth = 12;
+			this.monthName = this.monthNames[this.month];
+
+		}
+
+		this.getData();
+
+	}
+
+	onChangeMonthForward() {
+
+		if (this.month === 11) {
+			this.month = 0;
+			this.displayMonth = 1;
+			this.monthName = this.monthNames[this.month];
+
+			this.getData();
+
+			return;
+		}
+
+		this.month++;
+		this.displayMonth++;
+		this.monthName = this.monthNames[this.month];
+
+		this.getData();
+
+	}
+
+	onChangeMonthBack() {
+
+		if (this.month === 0) {
+			this.month = 11;
+			this.displayMonth = 12;
+			this.monthName = this.monthNames[this.month];
+
+			this.getData();
+
+			return;
+		}
+
+		this.month--;
+		this.displayMonth--;
+		this.monthName = this.monthNames[this.month]
+
+		this.getData();
 
 	}
 }

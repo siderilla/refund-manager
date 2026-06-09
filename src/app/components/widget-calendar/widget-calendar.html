@@ -1,7 +1,29 @@
 <div class="calendar-container">
-	@for (cell of cells(); track cell.date) {
-		<div class="cell" [class.cell-inactive]="!cell.isCurrentMonth">
-			{{ cell.outlayAmount }}
+
+	<div class="cells-header">
+		<button (click)="onChangeMonth(-1)">
+			<i class="fa-solid fa-caret-left"></i>
+		</button>
+
+		<span>{{ monthName }}</span>
+
+		<button (click)="onChangeMonth(1)">
+			<i class="fa-solid fa-caret-right"></i>
+		</button>
+	</div>
+
+	<div class="cells-container">
+
+		@for (cell of cells(); track cell.date) {
+
+		<div class="cell" [class.cell-inactive]="!cell.isCurrentMonth"
+			[style.background-color]="getCellColor(cell.outlayAmount, cell.isCurrentMonth)">
+			@if (cell.isCurrentMonth === true) {
+			{{ cell.outlayAmount }} €
+			}
 		</div>
-	}
+
+		}
+
+	</div>
 </div>
