@@ -12,6 +12,8 @@ export class HrMenu {
 	viewSelected = output<View>();
 	currentActive = input<string>();
 
+	collapsed = input<boolean>(true);
+
 	onMenuHrClick(view: View['type']) {
 		this.viewSelected.emit({ type: view });
 	}

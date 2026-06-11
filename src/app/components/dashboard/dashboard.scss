@@ -1,6 +1,6 @@
 .dashboard-container {
 	display: grid;
-	grid-template-columns: 300px 1fr 1fr auto;
+	grid-template-columns: 100px 1fr 1fr auto;
 	grid-template-areas:
 		"sidebar welcome welcome logout"
 		"sidebar view view view"

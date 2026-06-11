@@ -16,7 +16,9 @@
 
 		@for (cell of cells(); track cell.date) {
 
-		<div class="cell" [class.cell-inactive]="!cell.isCurrentMonth"
+		<div class="cell" 
+			(click)="onInactiveCell(cell)"
+			[class.cell-inactive]="!cell.isCurrentMonth"
 			[style.background-color]="getCellColor(cell.outlayAmount, cell.isCurrentMonth)">
 			@if (cell.isCurrentMonth === true) {
 			{{ cell.outlayAmount }} €

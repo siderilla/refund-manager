@@ -1,4 +1,4 @@
-<div class="container-hr-menu">
+<div class="container-hr-menu" [class.collapsed]="collapsed()">
 	<h4>Area HR</h4>
 	<button (click)="onMenuHrClick('requests-pending')" 
 		[class.active]="currentActive() === 'requests-pending'">

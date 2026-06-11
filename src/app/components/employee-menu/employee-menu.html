@@ -1,4 +1,4 @@
-<div class="container-employee-menu">
+<div class="container-employee-menu" [class.collapsed]="collapsed()">
 	<h4>Area Personale</h4>
 	<button (click)="onMenuClick('my-requests-list')"
 		[class.active]="currentActive() === 'my-requests-list'">

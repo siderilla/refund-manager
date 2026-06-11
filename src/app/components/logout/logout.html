@@ -1,5 +1,6 @@
-<div [class.logout-dashboard]="context() === 'dashboard'"
-     [class.logout-sidebar]="context() === 'sidebar'">
+<div 	[class.logout-dashboard]="context() === 'dashboard'"
+     	[class.logout-sidebar]="context() === 'sidebar'"
+		[class.collapsed]="collapsed()">
 	<button (click)="onLogoutClick()">
 		<p>Log Out</p>
 		<i class="fa-solid fa-right-from-bracket"></i>

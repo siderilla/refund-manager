@@ -11,6 +11,8 @@ export class Logout {
 
 	private router = inject(Router);
 
+	collapsed = input<boolean>(true);
+
 	context = input<'dashboard' | 'sidebar'>('dashboard');
 
 	onLogoutClick() {

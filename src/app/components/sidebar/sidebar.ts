@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import { EmployeeMenu } from "../employee-menu/employee-menu";
 import { HrMenu } from "../hr-menu/hr-menu";
 import { View } from '../../models/view';
@@ -19,6 +19,8 @@ export class Sidebar {
 	isHR = input<boolean>();
 	viewSelected = output<View>();
 	activeView = input<View>();
+	
+	isCollapsed = signal(true);
 
 	onViewSelected(view: View) {
 		this.viewSelected.emit(view)

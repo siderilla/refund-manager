@@ -12,6 +12,8 @@ export class EmployeeMenu {
 	viewSelected = output<View>();
 	currentActive = input<string>();
 
+	collapsed = input<boolean>(true);
+
 	onMenuClick(view: View['type']) {
 		this.viewSelected.emit({ type: view })
 	}

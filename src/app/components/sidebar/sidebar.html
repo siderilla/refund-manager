@@ -1,22 +1,27 @@
-<div class="sidebar-container">
-	
+<div class="sidebar-container" 
+	(mouseenter)="isCollapsed.set(false)" 
+	(mouseleave)="isCollapsed.set(true)"
+	[class.expanded]="!isCollapsed()">
+
 	<div class="logo">
 		<i class="fa-solid fa-people-roof" style="color: rgb(0, 102, 212);"></i>
 	</div>
 
 	<app-employee-menu 
+		[collapsed]="isCollapsed()"
 		(viewSelected)="onViewSelected($event)"
 		[currentActive]="activeView()?.type">
 	</app-employee-menu>
 
 	@if (isHR()) {
-
-	<app-hr-menu 
-		(viewSelected)="onViewSelected($event)"
-		[currentActive]="activeView()?.type">
-	</app-hr-menu>
-
+		<app-hr-menu 
+			[collapsed]="isCollapsed()"
+			(viewSelected)="onViewSelected($event)"
+			[currentActive]="activeView()?.type">
+		</app-hr-menu>
 	}
 
-	<app-logout class="logout" [context]="'sidebar'"></app-logout>
+	<app-logout class="logout" [context]="'sidebar'" 
+		[collapsed]="isCollapsed()">
+	</app-logout>
 </div>

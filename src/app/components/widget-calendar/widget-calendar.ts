@@ -29,16 +29,16 @@ export class WidgetCalendar implements OnInit {
 
 	// dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 	monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-	monthName: string = this.monthNames[this.month]; // non si aggiorna, devo usare onChangeMonth per aggiornarlo
+	monthName: string = this.monthNames[this.month];
 
 
 	ngOnInit() {
 
-		this.getData();
+		this.fetchData();
 
 	}
 
-	getData() {
+	fetchData() {
 
 		this.outlayService.getCalendarSummary(this.employee()!.id,
 			this.displayMonth,
@@ -133,8 +133,11 @@ export class WidgetCalendar implements OnInit {
 
 		currentCells.forEach(cell => {
 			const matchingData = this.summary.find(o => o.date === cell.date);
+
 			if (matchingData?.outlayAmount) {
 				cell.outlayAmount = matchingData.outlayAmount
+				console.log(cell.date);
+
 			}
 			if (matchingData?.refundAmount) {
 				cell.refundAmount = matchingData.refundAmount
@@ -159,7 +162,7 @@ export class WidgetCalendar implements OnInit {
 
 		// se la spesa è 0, ma guardiamo le celle del mese corrente, 
 		// restituisco il colore meno intenso possibile, nella scala del blu scelto
-		if (outlayAmount === 0 && isCurrentMonth) { return "rgb(220, 238, 255)" }
+		if (outlayAmount === 0 && isCurrentMonth) { return "rgb(241, 249, 252)" }
 
 		// se abbiamo delle spese e guardiamo il mese corrente, 
 		// restituisco una stringa costruita con i valori calcolati in base alla sfumatura 
@@ -167,14 +170,15 @@ export class WidgetCalendar implements OnInit {
 		if (isCurrentMonth) {
 
 			const value = outlayAmount / this.maxOutlayAmount * 100;
+			const scaledValue = 10 + (value * 90 / 100);
 
-			const r = 255 - (255 * value / 100);
-			const g = 255 - ((255 - 172) * value / 100);
-			const b = 255 - (0 * value / 100);
+			const r = 255 - (255 * scaledValue / 100);
+			const g = 255 - ((255 - 172) * scaledValue / 100);
+			const b = 255 - (0 * scaledValue / 100);
 
 			return "rgb(" + r + ", " + g + ", " + b + ")";
 
-		} else { return "rgb(245, 245, 245)"; }
+		} else { return "rgb(245, 245, 245)"; } // le celle inattive
 	}
 
 	onChangeMonth(direction: number) {
@@ -199,47 +203,61 @@ export class WidgetCalendar implements OnInit {
 
 		}
 
-		this.getData();
+		this.fetchData();
 
 	}
 
-	onChangeMonthForward() {
+	onInactiveCell(result: CalendarCellDto) {
 
-		if (this.month === 11) {
-			this.month = 0;
-			this.displayMonth = 1;
-			this.monthName = this.monthNames[this.month];
+		const toNumberDate = Number(result.date.substring(5, 7));
 
-			this.getData();
-
-			return;
+		if (this.displayMonth - toNumberDate > 0) {
+			this.onChangeMonth(-1);
+		}
+		if (this.displayMonth - toNumberDate < 0) {
+			this.onChangeMonth(1);
 		}
 
-		this.month++;
-		this.displayMonth++;
-		this.monthName = this.monthNames[this.month];
-
-		this.getData();
-
 	}
 
-	onChangeMonthBack() {
+	// onChangeMonthForward() {
 
-		if (this.month === 0) {
-			this.month = 11;
-			this.displayMonth = 12;
-			this.monthName = this.monthNames[this.month];
+	// 	if (this.month === 11) {
+	// 		this.month = 0;
+	// 		this.displayMonth = 1;
+	// 		this.monthName = this.monthNames[this.month];
 
-			this.getData();
+	// 		this.fetchData();
 
-			return;
-		}
+	// 		return;
+	// 	}
 
-		this.month--;
-		this.displayMonth--;
-		this.monthName = this.monthNames[this.month]
+	// 	this.month++;
+	// 	this.displayMonth++;
+	// 	this.monthName = this.monthNames[this.month];
 
-		this.getData();
+	// 	this.fetchData();
 
-	}
+	// }
+
+	// onChangeMonthBack() {
+
+	// 	if (this.month === 0) {
+	// 		this.month = 11;
+	// 		this.displayMonth = 12;
+	// 		this.monthName = this.monthNames[this.month];
+
+	// 		this.fetchData();
+
+	// 		return;
+	// 	}
+
+	// 	this.month--;
+	// 	this.displayMonth--;
+	// 	this.monthName = this.monthNames[this.month]
+
+	// 	this.fetchData();
+
+	// }
+
 }
