@@ -1,6 +1,3 @@
-// --- File: logout.scss ---
-
-// 1. LOGOUT DASHBOARD (Resta invariato e pulito)
 .logout-dashboard {
 	display: flex;
 	justify-content: flex-end;
@@ -30,8 +27,6 @@
 	}
 }
 
-
-// 2. LOGOUT SIDEBAR (Sistemato con supporto al collassamento)
 .logout-sidebar {
 	display: flex;
 	width: 100%;
@@ -42,13 +37,13 @@
 		gap: 20px;
 		cursor: pointer;
 		border: none;
-		padding: 15px 20px; // Uniformato il padding verticale a quello dei menu
+		padding: 15px 20px;
 		outline: none;
 		color: rgb(51, 51, 51);
 		text-align: left;
 		background-color: transparent;
 		width: 100%;
-		transition: gap 0.3s ease; // Transizione fluida quando cambia lo stato
+		transition: gap 0.3s ease;
 
 		i {
 			color: rgb(51, 51, 51);
@@ -60,15 +55,14 @@
 		}
 	}
 
-	// Quando la sidebar invia il flag [collapsed]="true" al componente
 	&.collapsed {
 		button {
-			justify-content: center; // Centra geometricamente l'icona
+			justify-content: center;
 			padding: 15px 0;
-			gap: 0; // Elimina lo spazio vuoto a destra dell'icona
+			gap: 0;
 
 			p {
-				display: none; // Rimuove completamente il testo dal layout
+				display: none; // quando è collassato, il testo scompare
 			}
 		}
 	}
