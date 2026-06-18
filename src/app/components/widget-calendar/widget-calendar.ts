@@ -87,7 +87,6 @@ export class WidgetCalendar implements OnInit {
 			const isToday = dateObj.getDate() == today.getDate() &&
 				dateObj.getMonth() == today.getMonth() &&
 				dateObj.getFullYear() == today.getFullYear();
-			console.log("la data: ", dateObj);
 
 			const cell: CalendarCellDto = {
 				date: cellDate,
@@ -118,8 +117,6 @@ export class WidgetCalendar implements OnInit {
 			}
 
 			result.push(cell);
-
-			console.log(this.cells);
 		}
 
 		this.cells.set(result);
@@ -136,8 +133,6 @@ export class WidgetCalendar implements OnInit {
 
 			if (matchingData?.outlayAmount) {
 				cell.outlayAmount = matchingData.outlayAmount
-				console.log(cell.date);
-
 			}
 			if (matchingData?.refundAmount) {
 				cell.refundAmount = matchingData.refundAmount

@@ -1,42 +1,70 @@
 .water-widget-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-
-	width: 100%;
-	height: 100%;
-}
-
-.water-circle {
-	width: 150px;
-	height: 150px;
-	border-radius: 50%;
-	background-color: #007bff;
-
-	display: flex;
-    flex-direction: column;
+    display: flex;
     justify-content: center;
     align-items: center;
-    
+    width: 100%;
+    height: 100%;
+}
+
+.circle {
     position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
     overflow: hidden;
+    border: 4px solid rgb(255, 255, 255);
+    background-color: #f0f8ff; 
+    transform: translate3d(0, 0, 0);
 }
 
-.label-container {
-	display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 10;
-    color: white;
+/* Stile unico per ENTRAMBE le label */
+.label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    font-size: 1.5rem;
+    white-space: nowrap;
+    pointer-events: none; /* Evita che interferiscano con il mouse */
 }
 
-.percentage {
-	font-size: 2rem;
-	font-weight: bold;
-	color: white;
+/* Colore esatto per quando lo sfondo è chiaro */
+.label-blue {
+    color: rgb(2, 87, 209); 
+    z-index: 999; /* Sta dietro all'acqua */
 }
 
-.amount {
-	font-size: 0.9rem;
-	color: white;
+/* Colore esatto per quando viene sommersa */
+.label-white {
+    color: rgb(255, 255, 255); 
+    z-index: 999; /* Sta sopra a tutto (acqua e onda) */
+    transition: clip-path 2s cubic-bezier(0.4, 0, 0.2, 1); /* Segue la fluidità dell'acqua */
+}
+
+.water-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgb(2, 87, 209);
+    transition: height 2s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -50;
+}
+
+.wave {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    width: 200%;
+    height: 30px;
+    background: url('/wave.svg') repeat-x;
+    background-size: 50% 100%;
+    animation: wave-move 4s linear infinite;
+    z-index: -500;
+}
+
+@keyframes wave-move {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
 }

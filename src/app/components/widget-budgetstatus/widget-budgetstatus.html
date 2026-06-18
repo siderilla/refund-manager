@@ -1,8 +1,13 @@
 <div class="water-widget-container">
-	<div class="water-circle">
-		<div class="label-container">
-			<span class="percentage">75%</span>
-			<span class="amount">750€ / 1000€</span>
-		</div>
-	</div>
+    <div class="circle">
+        <div class="label label-blue">{{ displayPercentage() }}%</div>
+
+        <div class="water-fill" [style.height.%]="displayPercentage()">
+            <div class="wave"></div>
+        </div>
+
+        <div class="label label-white" [style.clip-path]="'inset(' + (100 - displayPercentage()) + '% 0 0 0)'">
+            {{ displayPercentage() }}%
+        </div>
+    </div>
 </div>
