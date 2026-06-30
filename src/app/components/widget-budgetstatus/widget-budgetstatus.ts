@@ -12,8 +12,13 @@ import { CategoryBudgetSummaryDto } from '../../models/category-budget-summary';
 })
 export class WidgetBudgetstatus implements OnInit {
 
+	componentId = Math.random().toString(36).substring(2, 7);
+
 	spentAmount = signal(0);
 	totalBudget = signal(0);
+
+	// spentAmount = input<number>(500);
+	// totalBudget = input<number>(1000);
 
 	budgetSummary: CategoryBudgetSummaryDto[] = [];
 
@@ -30,7 +35,7 @@ export class WidgetBudgetstatus implements OnInit {
 
 	percentage = computed(() => {
 		const calc = Math.round((this.spentAmount() / this.totalBudget()) * 100);
-		return Math.min(100, Math.max(0, calc)); // Cap tra 0 e 100
+		return Math.min(100, Math.max(0, calc)); // cap tra 0 e 100
 	});
 
 	displayPercentage = signal(0);
@@ -53,7 +58,8 @@ export class WidgetBudgetstatus implements OnInit {
 				next: (data: CategoryBudgetSummaryDto[]) => {
 					this.budgetSummary = data;
 					this.spentAmount.set(data.reduce((acc, cat) => acc + cat.spentMonth, 0));
-    				this.totalBudget.set(data.reduce((acc, cat) => acc + cat.monthlyBudget, 0));
+					this.totalBudget.set(data.reduce((acc, cat) => acc + cat.monthlyBudget, 0));
+					
 					// piccolo delay permette al browser di registrare lo stato a 0%
 					// e poi far partire l'animazione fluida verso l'alto fino alla percentuale reale
 					setTimeout(() => {

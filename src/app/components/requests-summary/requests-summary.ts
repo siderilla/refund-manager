@@ -25,6 +25,7 @@ export class RequestsSummary {
 	employee = input<EmployeeOutputDto>();
 
 	budgetSummary = signal<CategoryBudgetSummaryDto[]>([]);
+	selectedDate = signal<string | null>(null)
 
 	ngOnInit() {
 		this.loadSummary();

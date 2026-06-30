@@ -1,4 +1,4 @@
-<div class="water-widget-container">
+<!-- <div class="water-widget-container">
     <div class="circle">
         <div class="label label-blue">{{ displayPercentage() }}%</div>
 
@@ -10,4 +10,32 @@
             {{ displayPercentage() }}%
         </div>
     </div>
+</div> -->
+
+<div class="water-widget-container">
+	<div class="circle">
+		<div class="label label-blue">{{ displayPercentage() }}%</div>
+
+		<svg class="water-svg" viewBox="0 0 150 150">
+			<defs>
+				<mask [id]="'liquid-mask-' + componentId" maskUnits="userSpaceOnUse">
+					<rect x="0" y="0" width="150" height="150" fill="black" />
+
+					<g [style.transform]="'translateY(' + (150 - (175 * displayPercentage() / 100)) + 'px)'"
+						class="mask-wave-group">
+						<path class="svg-wave" fill="white"
+							d="M 0 15 Q 37.5 25, 75 15 T 150 15 T 225 15 T 300 15 L 300 200 L 0 200 Z" />
+					</g>
+				</mask>
+			</defs>
+
+			<rect x="0" y="0" width="150" height="150" fill="rgb(12, 109, 255)"
+				[attr.mask]="'url(#liquid-mask-' + componentId + ')'" />
+
+			<text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" class="svg-label-white"
+				[attr.mask]="'url(#liquid-mask-' + componentId + ')'">
+				{{ displayPercentage() }}%
+			</text>
+		</svg>
+	</div>
 </div>

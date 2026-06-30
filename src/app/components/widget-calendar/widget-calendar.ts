@@ -1,8 +1,9 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, inject, input, OnInit, output, signal } from '@angular/core';
 import { CalendarCellDto } from '../../models/calendar-cell';
 import { OutlaySummaryDto } from '../../models/outlay-summary';
 import { OutlayService } from '../../services/outlay';
 import { EmployeeOutputDto } from '../../models/employee-output';
+import { DateService } from '../../services/date';
 
 @Component({
 	selector: 'app-widget-calendar',
@@ -13,6 +14,7 @@ import { EmployeeOutputDto } from '../../models/employee-output';
 export class WidgetCalendar implements OnInit {
 
 	outlayService = inject(OutlayService);
+	dateService = inject(DateService);
 
 	isHR = input<boolean>();
 	employee = input<EmployeeOutputDto>();
@@ -20,7 +22,8 @@ export class WidgetCalendar implements OnInit {
 	cells = signal<CalendarCellDto[]>([]);
 	summary: OutlaySummaryDto[] = [];
 
-	today: Date = new Date;
+	cellIsClicked = output<string>();
+
 	month: number = new Date().getMonth();
 	year: number = new Date().getFullYear();
 
@@ -56,14 +59,13 @@ export class WidgetCalendar implements OnInit {
 	generateCalendar(month: number, year: number) {
 		const result: CalendarCellDto[] = [];
 
-		const firstDayOfMonth = new Date(year, month, 1); // getDay() of the week = 5 se è maggio
-		const offset = (firstDayOfMonth.getDay() + 6) % 7; // il primo giorno di maggio diventa 4
-		const currentMonthLength = new Date(year, month + 1, 0).getDate();
+		const offset = this.dateService.getWeekOffset(year, month) // il primo giorno di maggio diventa 4
+		const currentMonthLength = this.dateService.currentMonthLength(year, month);
 
 		// blocco mese precedente
 		for (let i = 0; i < offset; i++) {
 			const day = currentMonthLength - offset + i;
-			const cellDate = this.formatDate(year, this.displayMonth - 1, day + 1);
+			const cellDate = this.dateService.formatDate(year, this.displayMonth - 1, day + 1);
 
 			const cell: CalendarCellDto = {
 				date: cellDate,
@@ -79,14 +81,8 @@ export class WidgetCalendar implements OnInit {
 
 		// blocco mese corrente
 		for (let i = 1; i <= currentMonthLength; i++) {
-			const dateObj = new Date(year, month, i);
-
-			const cellDate = this.formatDate(year, this.displayMonth, i);
-
-			const today = new Date();
-			const isToday = dateObj.getDate() == today.getDate() &&
-				dateObj.getMonth() == today.getMonth() &&
-				dateObj.getFullYear() == today.getFullYear();
+			const cellDate = this.dateService.formatDate(year, this.displayMonth, i);
+			const isToday = this.dateService.isToday(year, month, i);
 
 			const cell: CalendarCellDto = {
 				date: cellDate,
@@ -105,7 +101,7 @@ export class WidgetCalendar implements OnInit {
 		const missingCells = 42 - result.length;
 
 		for (let i = 1; i <= missingCells; i++) {
-			const cellDate = this.formatDate(year, this.displayMonth + 1, i);
+			const cellDate = this.dateService.formatDate(year, this.displayMonth + 1, i);
 
 			const cell: CalendarCellDto = {
 				date: cellDate,
@@ -141,16 +137,6 @@ export class WidgetCalendar implements OnInit {
 
 		this.maxOutlayAmount = Math.max(...currentCells.map(c => c.outlayAmount));
 
-	}
-
-	formatDate(year: number, month: number, day: number) {
-
-		const toStringYear = year.toString();
-		const toStringMonth = month.toString();
-		const toStringDay = day.toString();
-		const stringDate = toStringYear + "-" + toStringMonth.padStart(2, "0") + "-" + toStringDay.padStart(2, "0")
-
-		return stringDate;
 	}
 
 	getCellColor(outlayAmount: number, isCurrentMonth: boolean) {
@@ -202,6 +188,14 @@ export class WidgetCalendar implements OnInit {
 
 	}
 
+	onCellClick(cell: CalendarCellDto) {
+		if (cell.isCurrentMonth) {
+			this.cellIsClicked.emit(cell.date);
+		} else {
+			this.onInactiveCell(cell);
+		}
+	}
+
 	onInactiveCell(result: CalendarCellDto) {
 
 		const toNumberDate = Number(result.date.substring(5, 7));
@@ -215,44 +209,5 @@ export class WidgetCalendar implements OnInit {
 
 	}
 
-	// onChangeMonthForward() {
-
-	// 	if (this.month === 11) {
-	// 		this.month = 0;
-	// 		this.displayMonth = 1;
-	// 		this.monthName = this.monthNames[this.month];
-
-	// 		this.fetchData();
-
-	// 		return;
-	// 	}
-
-	// 	this.month++;
-	// 	this.displayMonth++;
-	// 	this.monthName = this.monthNames[this.month];
-
-	// 	this.fetchData();
-
-	// }
-
-	// onChangeMonthBack() {
-
-	// 	if (this.month === 0) {
-	// 		this.month = 11;
-	// 		this.displayMonth = 12;
-	// 		this.monthName = this.monthNames[this.month];
-
-	// 		this.fetchData();
-
-	// 		return;
-	// 	}
-
-	// 	this.month--;
-	// 	this.displayMonth--;
-	// 	this.monthName = this.monthNames[this.month]
-
-	// 	this.fetchData();
-
-	// }
 
 }

@@ -5,35 +5,15 @@
 	</div>
 	<div class="area-calendar">
 		<app-widget-calendar
-		[employee]="employee()"></app-widget-calendar>
+		[employee]="employee()"
+		(cellIsClicked)="selectedDate.set($event)"></app-widget-calendar>
 	</div>
 	<div class="area-charts">
-		<app-widget-charts></app-widget-charts>
+		<app-widget-charts
+		[date]="selectedDate()"></app-widget-charts>
 	</div>
 	<div class="area-detail">
-		<app-widget-outlaydetail></app-widget-outlaydetail>
+		<app-widget-outlaydetail
+		[date]="selectedDate()"></app-widget-outlaydetail>
 	</div>
 </div>
-
-
-<!-- <div class="summary-grid">
-	@for (item of budgetSummary(); track item.categoryName) {
-	<div>
-		<div>
-			<h3>{{ item.categoryName }}</h3>
-			<span>Oggi: {{ item.spentToday }}€ / {{ item.dailyBudget }}€</span>
-		</div>
-
-		<div>
-			<div>
-				<span>Speso nel mese: </span>
-				<span>{{ item.spentMonth }}€ / {{ item.monthlyBudget }}€</span>
-			</div>
-
-			<div>
-				<p>Residuo mese: <strong>{{ item.monthlyLeft }}€</strong></p>
-			</div>
-		</div>
-	</div>
-	}
-</div> -->

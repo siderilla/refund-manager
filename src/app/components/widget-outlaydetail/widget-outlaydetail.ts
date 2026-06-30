@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
 	selector: 'app-widget-outlaydetail',
@@ -6,4 +6,8 @@ import { Component } from '@angular/core';
 	templateUrl: './widget-outlaydetail.html',
 	styleUrl: './widget-outlaydetail.scss',
 })
-export class WidgetOutlaydetail {}
+export class WidgetOutlaydetail {
+
+	date = input<string | null>(null);
+
+}
