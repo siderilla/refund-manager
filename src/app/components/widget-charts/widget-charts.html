@@ -1,1 +1,8 @@
-<p>widget-colcharts works!</p>
+<div class="charts-container">
+	@for (item of daySummary(); track item.categoryName) {
+		<div class="column-wrap">
+			<div class="column" [style.height]="getColumnHeight(item.outlayAmount)"></div>
+			<span>{{ item.categoryName }}</span>
+		</div>
+	}
+</div>

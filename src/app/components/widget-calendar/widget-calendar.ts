@@ -17,7 +17,11 @@ export class WidgetCalendar implements OnInit {
 	dateService = inject(DateService);
 
 	isHR = input<boolean>();
-	employee = input<EmployeeOutputDto>();
+
+
+	employee = input<EmployeeOutputDto>();  // se il parent cambiasse dipendente senza distruggere e ricreare il componente, 
+											// ngOnInit non verrebbe rieseguito, non basterebbe, dunque bisognerà poi pensare a un effect in futuro
+
 
 	cells = signal<CalendarCellDto[]>([]);
 	summary: OutlaySummaryDto[] = [];

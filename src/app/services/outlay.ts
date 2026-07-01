@@ -5,6 +5,7 @@ import { Observable, ObservableLike } from 'rxjs';
 import { OutlayInputDto } from '../models/outlay-input';
 import { CategoryBudgetSummaryDto } from '../models/category-budget-summary';
 import { CalendarCellDto } from '../models/calendar-cell';
+import { DaySummaryDto } from '../models/day-summary';
 
 @Injectable({
 	providedIn: 'root',
@@ -39,6 +40,14 @@ export class OutlayService {
 		if (department) params.department = department;
 
 		return this.http.get<CalendarCellDto[]>(`${this.baseUrl}/Outlays/calendar-summary`, { params });
+	}
+
+	getDaySummary(date: string, employeeId?: string, department?: string) {
+		let params: any = { date };
+		if (employeeId) params.employeeId = employeeId;
+		if (department) params.department = department;
+
+		return this.http.get<DaySummaryDto[]>(`${this.baseUrl}/Outlays/day-summary`, { params });
 	}
 
 	createOutlay(employeeId: string, outlay: OutlayInputDto): Observable<any> {
