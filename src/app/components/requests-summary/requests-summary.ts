@@ -25,7 +25,10 @@ export class RequestsSummary {
 	employee = input<EmployeeOutputDto>();
 
 	budgetSummary = signal<CategoryBudgetSummaryDto[]>([]);
-	selectedDate = signal<string | null>(null)
+	selectedDate = signal<string | null>(null);
+
+	currentCalendarMonth = signal<number>(new Date().getMonth() + 1);
+    currentCalendarYear = signal<number>(new Date().getFullYear());
 
 	ngOnInit() {
 		this.loadSummary();

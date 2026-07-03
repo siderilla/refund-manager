@@ -1,11 +1,20 @@
+/* --- 🛠️ STILI IN COMUNE & MAPPARE DELLE AREE (Valido sempre) --- */
 .dashboard-container {
 	display: grid;
-	grid-template-columns: 100px 1fr 1fr auto;
-	grid-template-areas:
-		"sidebar welcome welcome logout"
-		"sidebar view view view"
-		"sidebar view view view"
-		"sidebar view view view"
+	min-height: 100vh;
+	width: 100%;
+}
+
+.hamburger-btn {
+	grid-area: hamburger;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	border: none;
+	font-size: 22px;
+	color: rgb(12, 109, 255);
+	cursor: pointer;
 }
 
 .welcome-name {
@@ -22,4 +31,37 @@
 
 .view {
 	grid-area: view;
+}
+
+
+/* --- 📱 SOLO MOBILE & TABLET (fino a 991px) --- */
+@media (max-width: 991px) {
+	.dashboard-container {
+		grid-template-columns: auto 1fr auto;
+		grid-template-areas:
+			"hamburger welcome logout"
+			"view      view    view"
+			"view      view    view"
+			"view      view    view";
+	}
+
+	.hamburger-btn {
+		padding: 0 15px;
+		height: 100%;
+	}
+
+}
+
+
+/* --- 💻 SOLO DESKTOP (da 992px in su) --- */
+@media (min-width: 992px) {
+	.dashboard-container {
+		display: grid;
+		grid-template-columns: 100px 1fr 1fr auto;
+		grid-template-areas:
+			"sidebar welcome welcome logout"
+			"sidebar view view view"
+			"sidebar view view view"
+			"sidebar view view view"
+	}
 }

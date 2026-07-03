@@ -1,4 +1,9 @@
 <div class="dashboard-container">
+
+	<button class="hamburger-btn" 
+		(click)="isMobileMenuOpen.set(!isMobileMenuOpen())">
+		<i class="fa-solid fa-bars"></i>
+	</button>
 	
 	<app-welcome-name class="welcome-name" 
 		[userName]="employee?.name">
@@ -7,11 +12,16 @@
 	<app-logout class="logout">
 	</app-logout>
 
-	<app-sidebar class="sidebar" 
+	<app-sidebar class="sidebar"
+		[class.mobile-open]="isMobileMenuOpen()" 
 		(viewSelected)="onViewSelected($event)" 
 		[isHR]="isHR"
 		[activeView]="activeView">
 	</app-sidebar>
+
+	@if (isMobileMenuOpen()) {
+		<div class="sidebar-overlay" (click)="isMobileMenuOpen.set(false)"></div>
+	}
 
 	<app-request-view class="view" 
 		[activeView]="activeView"

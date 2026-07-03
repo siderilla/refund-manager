@@ -33,9 +33,10 @@ export class WidgetCalendar implements OnInit {
 
 	displayMonth = this.month + 1;
 	maxOutlayAmount: number = 0;
+	monthChanged = output<{ month: number, year: number }>();
 
-	// dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-	monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	dayNames = ['L', 'M', 'M', 'G', 'V', 'S', 'D'];
+	monthNames = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
 	monthName: string = this.monthNames[this.month];
 
 
@@ -170,13 +171,12 @@ export class WidgetCalendar implements OnInit {
 
 		this.month += direction;
 		this.displayMonth += direction;
-		this.monthName = this.monthNames[this.month];
 
 		if (this.month === 12) {
 
 			this.month = 0;
 			this.displayMonth = 1;
-			this.monthName = this.monthNames[this.month];
+			this.year += 1;
 
 		}
 
@@ -184,10 +184,13 @@ export class WidgetCalendar implements OnInit {
 
 			this.month = 11;
 			this.displayMonth = 12;
-			this.monthName = this.monthNames[this.month];
+			this.year -= 1;
 
 		}
 
+		this.monthName = this.monthNames[this.month];
+
+		this.monthChanged.emit({ month: this.displayMonth, year: this.year });
 		this.fetchData();
 
 	}

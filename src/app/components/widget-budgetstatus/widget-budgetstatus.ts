@@ -1,4 +1,4 @@
-import { Component, computed, input, signal, OnInit, inject } from '@angular/core';
+import { Component, computed, input, signal, OnInit, inject, effect } from '@angular/core';
 import { OutlayService } from '../../services/outlay';
 import { EmployeeOutputDto } from '../../models/employee-output';
 import { CategoryBudgetSummaryDto } from '../../models/category-budget-summary';
@@ -10,7 +10,7 @@ import { CategoryBudgetSummaryDto } from '../../models/category-budget-summary';
 	templateUrl: './widget-budgetstatus.html',
 	styleUrl: './widget-budgetstatus.scss',
 })
-export class WidgetBudgetstatus implements OnInit {
+export class WidgetBudgetstatus {
 
 	componentId = Math.random().toString(36).substring(2, 7);
 
@@ -22,16 +22,16 @@ export class WidgetBudgetstatus implements OnInit {
 
 	budgetSummary: CategoryBudgetSummaryDto[] = [];
 
-	month: number = new Date().getMonth();
-	year: number = new Date().getFullYear();
-
-	displayMonth = this.month + 1;
+	// month: number = new Date().getMonth();
+	// year: number = new Date().getFullYear();
+	// displayMonth = this.month + 1;
 
 	private outlayService = inject(OutlayService);
 
-
-
 	employee = input<EmployeeOutputDto>();
+
+	displayMonth = input.required<number>();
+    year = input.required<number>();
 
 	percentage = computed(() => {
 		const calc = Math.round((this.spentAmount() / this.totalBudget()) * 100);
@@ -39,35 +39,30 @@ export class WidgetBudgetstatus implements OnInit {
 	});
 
 	displayPercentage = signal(0);
+	monthNames = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+	monthName = computed(() => this.monthNames[this.displayMonth() - 1]);
 
-	ngOnInit() {
-
-		this.fetchData();
-
-		setTimeout(() => {
-			this.displayPercentage.set(this.percentage());
-		}, 200);
-
-	}
-
-	fetchData() {
-
-		this.outlayService.getBudgetSummary(this.employee()!.id,
-			this.displayMonth,
-			this.year).subscribe({
-				next: (data: CategoryBudgetSummaryDto[]) => {
-					this.budgetSummary = data;
-					this.spentAmount.set(data.reduce((acc, cat) => acc + cat.spentMonth, 0));
-					this.totalBudget.set(data.reduce((acc, cat) => acc + cat.monthlyBudget, 0));
-					
-					// piccolo delay permette al browser di registrare lo stato a 0%
-					// e poi far partire l'animazione fluida verso l'alto fino alla percentuale reale
-					setTimeout(() => {
-						this.displayPercentage.set(this.percentage());
-					}, 200);
-				},
-				error: () => console.error("errore nel caricamento delle celle")
-			})
-
-	}
+	constructor() {
+        effect(() => {
+            const empId = this.employee()?.id;
+            const m = this.displayMonth();
+            const y = this.year();
+            
+            if (empId && m && y) {
+                this.displayPercentage.set(0); 
+                
+                this.outlayService.getBudgetSummary(empId, m, y).subscribe({
+                    next: (data) => {
+                        this.spentAmount.set(data.reduce((acc, cat) => acc + cat.spentMonth, 0));
+                        this.totalBudget.set(data.reduce((acc, cat) => acc + cat.monthlyBudget, 0));
+                        
+                        setTimeout(() => {
+                            this.displayPercentage.set(this.percentage());
+                        }, 50);
+                    },
+                    error: () => console.error("Errore budget")
+                });
+            }
+        });
+    }
 }

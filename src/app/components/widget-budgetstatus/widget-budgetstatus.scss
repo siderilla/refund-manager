@@ -1,21 +1,41 @@
-.water-widget-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+/* IMPORTANTE: Dice ad Angular che questo componente deve occupare tutto lo spazio disponibile */
+:host {
+	display: block;
 	width: 100%;
 	height: 100%;
 }
 
+.water-widget-container {
+	display: flex;
+	flex-direction: column;
+	/* Forza la disposizione verticale: prima titolo, poi cerchio */
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	gap: 12px;
+	/* Ridotto lo spazio interno */
+	text-align: center;
+}
+
+.budget-title {
+	margin: 0;
+	font-size: 14px;
+	color: #000000;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
 .circle {
 	position: relative;
-	width: 150px;
-	height: 150px;
+	width: 100%;
+	max-width: 130px;
+	aspect-ratio: 1 / 1;
 	border-radius: 50%;
 	overflow: hidden;
 	border: 4px solid rgb(255, 255, 255);
 	background-color: #f0f8ff;
-	transform: translate3d(0, 0, 0);
-	/* forza il rendering hardware */
+	// box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 /* HTML di sfondo blu */

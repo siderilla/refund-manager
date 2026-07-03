@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { EmployeeOutputDto } from '../../models/employee-output';
 import { Sidebar } from '../sidebar/sidebar';
 import { WelcomeName } from "../welcome-name/welcome-name";
@@ -22,6 +22,8 @@ export class Dashboard implements OnInit {
 	employee: EmployeeOutputDto | undefined = undefined;
 	activeView: ViewType | undefined = undefined;
 
+	isMobileMenuOpen = signal(false);
+
 	get isHR(): boolean {
 		return this.employee?.role === 'Investigatore privato';
 	}
@@ -37,6 +39,7 @@ export class Dashboard implements OnInit {
 
 	onViewSelected(event: ViewType) {
 		this.activeView = event;
+		this.isMobileMenuOpen.set(false); // chiude la sidebar su mobile dopo il click
 	}
 
 }

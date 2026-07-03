@@ -14,6 +14,10 @@
 
 	<div class="cells-container">
 
+		@for (day of dayNames; track day) {
+			<div class="day-header">{{ day }}</div>
+		}
+
 		@for (cell of cells(); track cell.date) {
 
 		<div class="cell" 

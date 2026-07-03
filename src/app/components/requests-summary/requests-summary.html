@@ -1,13 +1,18 @@
 <div class="summary-grid">
 	<div class="area-status">
-		<app-widget-budgetstatus
-		[employee]="employee()"></app-widget-budgetstatus>
-	</div>
-	<div class="area-calendar">
-		<app-widget-calendar
-		[employee]="employee()"
-		(cellIsClicked)="selectedDate.set($event)"></app-widget-calendar>
-	</div>
+        <app-widget-budgetstatus
+            [employee]="employee()"
+            [displayMonth]="currentCalendarMonth()"
+            [year]="currentCalendarYear()">
+        </app-widget-budgetstatus>
+    </div>
+    <div class="area-calendar">
+        <app-widget-calendar
+            [employee]="employee()"
+            (cellIsClicked)="selectedDate.set($event)"
+            (monthChanged)="currentCalendarMonth.set($event.month); currentCalendarYear.set($event.year)">
+        </app-widget-calendar>
+    </div>
 	<div class="area-charts">
 		<app-widget-charts
 		[date]="selectedDate()"

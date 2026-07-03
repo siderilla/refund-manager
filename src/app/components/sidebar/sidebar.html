@@ -1,7 +1,7 @@
 <div class="sidebar-container" 
-	(mouseenter)="isCollapsed.set(false)" 
-	(mouseleave)="isCollapsed.set(true)"
-	[class.expanded]="!isCollapsed()">
+	(mouseenter)="onMouseEnter()" 
+    (mouseleave)="onMouseLeave()"
+    [class.expanded]="!isCollapsed()">
 
 	<div class="logo">
 		<i class="fa-solid fa-people-roof" style="color: rgb(0, 102, 212);"></i>
