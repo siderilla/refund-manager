@@ -1,1 +1,14 @@
-<p>widget-outlaydetail works!</p>
+@if (date()) {
+	@if (result().length === 0) {
+		<p>Nessuna spesa in questo giorno</p>
+	} @else {
+		@for (outlay of result(); track outlay.id) {
+			<div class="outlay-detail">
+				{{ outlay.categoryName }}
+				{{ outlay.refundedAmount }}
+			</div>
+		}
+	}
+} @else {
+	<p>Seleziona un giorno per vedere i dettagli</p>
+}

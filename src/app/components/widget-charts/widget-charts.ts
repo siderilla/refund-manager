@@ -4,6 +4,7 @@ import { EmployeeOutputDto } from '../../models/employee-output';
 import { DaySummaryDto } from '../../models/day-summary';
 import { CategoryService } from '../../services/category';
 import { CategoryOutputDto } from '../../models/category-output';
+import { forkJoin } from 'rxjs';
 
 @Component({
 	selector: 'app-widget-charts',
@@ -13,17 +14,15 @@ import { CategoryOutputDto } from '../../models/category-output';
 })
 export class WidgetCharts {
 
-	private OutlayService = inject(OutlayService);
+	private outlayService = inject(OutlayService);
 	private categoryService = inject(CategoryService);
 
 	date = input<string | null>(null);
 	employee = input<EmployeeOutputDto>();
-
 	daySummary = signal<DaySummaryDto[]>([]);
-
+	
 	maxOutlayAmount: number = 0;
-
-
+	maxMonthlyBudget: number = 0;
 
 	constructor() {
 
@@ -32,35 +31,62 @@ export class WidgetCharts {
 			const employeeId = this.employee()?.id;
 			if (!date || !employeeId) return;
 
-			this.categoryService.getCategories().subscribe({
-				next: (categories: CategoryOutputDto[]) => {
-					this.OutlayService.getDaySummary(date, employeeId).subscribe({
-						next: (data) => {
-							const merged: DaySummaryDto[] = categories.map(cat => {
-								const match = data.find(d => d.categoryName === cat.name);
-								return {
-									categoryName: cat.name,
-									outlayAmount: match?.outlayAmount ?? 0,
-									refundAmount: match?.refundAmount ?? 0,
-								};
-							});
-							this.daySummary.set(merged);
-							this.maxOutlayAmount = Math.max(...merged.map(d => d.outlayAmount));
-						},
-						error: () => console.error('errore day summary')
+			forkJoin({
+				categories: this.categoryService.getCategories(),
+				summary: this.outlayService.getDaySummary(date, employeeId)
+			}).subscribe({
+				next: ({ categories, summary }) => {
+					const merged: DaySummaryDto[] = categories.map(cat => {
+						const match = summary.find(s => s.categoryName === cat.name);
+						return {
+							categoryName: cat.name,
+							outlayAmount: match?.outlayAmount ?? 0, // se c'è usalo, altrimenti == 0
+							refundAmount: match?.refundAmount ?? 0,
+							dailyBudget: cat.dailyBudget
+						};
 					});
+					this.daySummary.set(merged);
+					this.maxOutlayAmount = Math.max(...merged.map(mo => mo.outlayAmount));
+					this.maxMonthlyBudget = Math.max(...categories.map(mmb => mmb.monthlyBudget));
 				},
-				error: () => console.error('errore categorie')
+				error: () => console.error('errore caricamento dati')
 			});
+
+			// this.categoryService.getCategories().subscribe({ // fetcho tutte le categorie
+			// 	next: (categories: CategoryOutputDto[]) => {
+			// 		this.outlayService.getDaySummary(date, employeeId).subscribe({ // fetcho la somma delle spese fatte quel giorno raggruppate per categoria
+			// 			next: (data) => {
+			// 				// per ogni categoria esistente cerca se c'è una spesa quel giorno
+			// 				const merged: DaySummaryDto[] = categories.map(cat => {
+			// 					const match = data.find(d => d.categoryName === cat.name);
+			// 					return {
+			// 						categoryName: cat.name,
+			// 						outlayAmount: match?.outlayAmount ?? 0, // se c'è usalo, altrimenti == 0
+			// 						refundAmount: match?.refundAmount ?? 0,
+			// 						dailyBudget: cat.dailyBudget
+			// 					};
+			// 				});
+			// 				this.daySummary.set(merged);
+			// 				this.maxOutlayAmount = Math.max(...merged.map(d => d.outlayAmount)); // pesco il numero più grande per corrisponderlo al 100%
+			// 			},
+			// 			error: () => console.error('errore day summary')
+			// 		});
+			// 	},
+			// 	error: () => console.error('errore categorie')
+			// });
 		});
 		
 	}
 
-
-	getColumnHeight(outlayAmount: number): string {
+	// questo metodo verrà rinominato in getPolylinePercent o qualcosa del genere e verrà usato solo per la polyline
+	getBarLength(outlayAmount: number): string { // trasformo tutti gli importi in percentuali
 		if (!outlayAmount || this.maxOutlayAmount === 0) { return "0%"; }
 		const value = (outlayAmount / this.maxOutlayAmount) * 100;
 		return value.toString() + "%";
+	}
+
+	getGraphHeight(): number {
+		return this.maxMonthlyBudget;
 	}
 
 }

@@ -1,60 +1,70 @@
 .charts-container {
 	display: flex;
-	align-items: flex-end;
-	height: 100%;
-	/* Si adatta al genitore */
-	min-height: 180px;
+	flex-direction: column;
 	gap: 16px;
-	padding: 10px 5px;
+	padding: 16px;
+	width: 100%;
+	box-sizing: border-box;
+	background-color: #ffffff;
+	border-radius: 8px;
+}
 
-	/* Scroll orizzontale morbido per mobile */
-	overflow-x: auto;
-	overflow-y: hidden;
-	scroll-behavior: smooth;
+.row-wrap {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	width: 100%;
 
-	/* Nasconde la scrollbar brutta pur mantenendo la funzionalità */
-	scrollbar-width: none;
-
-	/* Firefox */
-	&::-webkit-scrollbar {
-		display: none;
-		/* Chrome/Safari */
+	// Su dispositivi molto piccoli, disponiamo etichetta e barra una sopra l'altra
+	@media (max-width: 480px) {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 4px;
 	}
 }
 
-.column-wrap {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: flex-end;
-	height: 100%;
-	min-width: 60px;
-	/* Ridotto leggermente per farne stare di più */
-	gap: 8px;
-	flex: 1 0 auto;
-	/* Evita che il contenitore schiacci le colonne */
-}
-
-.column {
-	width: 60px;
-	background-color: rgb(12, 109, 255);
-	border-radius: 4px 4px 0 0;
-	transition: height 0.3s ease;
-	min-height: 4px;
-	background-color: rgba(12, 109, 255, 0.1);
-}
-
-.column[style*="height: 0%"],
-.column[style*="height:0%"] {
-	background-color: rgb(240, 240, 240);
-}
-
-.column:not([style*="height: 0%"]):not([style*="height:0%"]) {
-	background-color: rgb(12, 109, 255);
-}
-
-span {
-	font-size: 11px;
-	text-align: center;
+.category-label {
+	font-size: 13px;
+	font-weight: 500;
+	color: #333333;
+	min-width: 100px;
+	max-width: 120px;
+	text-overflow: ellipsis;
+	overflow: hidden;
 	white-space: nowrap;
+	line-height: 1.2;
+
+	@media (max-width: 480px) {
+		max-width: 100%;
+		min-width: 0;
+	}
+}
+
+.graph-area {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	background-color: rgb(245, 245, 245); // Sfondo della corsia per dare profondità
+	border-radius: 4px;
+	height: 16px; // Spessore della barra fisso e cliccabile/visibile
+	width: 100%;
+	overflow: hidden;
+}
+
+.bar {
+	height: 100%;
+	border-radius: 4px;
+	transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+	min-width: 4px; // Un minimo per far vedere che esiste anche se vicino allo 0
+}
+
+// Stile basato sulla larghezza iniettata (0% vs attivo)
+.bar[style*="width: 0%"],
+.bar[style*="width:0%"] {
+	background-color: rgb(220, 220, 220);
+	min-width: 0;
+}
+
+.bar:not([style*="width: 0%"]):not([style*="width:0%"]) {
+	background-color: rgb(12, 109, 255);
 }

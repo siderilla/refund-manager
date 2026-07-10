@@ -1,8 +1,11 @@
 <div class="charts-container">
 	@for (item of daySummary(); track item.categoryName) {
-		<div class="column-wrap">
-			<div class="column" [style.height]="getColumnHeight(item.outlayAmount)"></div>
-			<span>{{ item.categoryName }}</span>
+	<div class="row-wrap">
+		<span class="category-label">{{ item.categoryName }}</span>
+		<div class="graph-area">
+			<div class="bar" [style.width]="getBarLength(item.outlayAmount)"></div> 
+			<!-- larghezza della barra calcolata dal metodo getBarLength e gli passo l'ammontare delle spese -->
 		</div>
+	</div>
 	}
 </div>
