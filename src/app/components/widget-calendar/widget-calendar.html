@@ -15,18 +15,26 @@
 	<div class="cells-container">
 
 		@for (day of dayNames; track day) {
-			<div class="day-header">{{ day }}</div>
+		<div class="day-header">{{ day }}</div>
 		}
 
 		@for (cell of cells(); track cell.date) {
 
 		<div class="cell" 
-			(click)="onCellClick(cell)"
+			(click)="onCellClick(cell)" 
 			[class.cell-inactive]="!cell.isCurrentMonth"
 			[style.background-color]="getCellColor(cell.outlayAmount, cell.isCurrentMonth)">
-			@if (cell.isCurrentMonth === true) {
-				{{ cell.outlayAmount }} €
+
+			@if (cell.isCurrentMonth && cell.outlayAmount != 0) {
+				<div class="outlay-amount">
+					{{ cell.outlayAmount }}€
+				</div>
 			}
+
+			<div class="day-date">
+				{{ cell.date.slice(-2) }}
+			</div>
+
 		</div>
 
 		}

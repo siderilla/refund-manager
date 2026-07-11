@@ -51,20 +51,53 @@ button {
 }
 
 .cell {
+	position: relative;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
 	aspect-ratio: 1 / 1;
 	width: 100%;
 	border-radius: 4px;
 
-	display: inline-block;
-	vertical-align: middle;
-	-webkit-transform: perspective(1px) translateZ(0);
-	transform: perspective(1px) translateZ(0);
-	box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-	-webkit-transition-duration: 0.2s;
-	transition-duration: 0.2s;
+	transition:
+		transform .15s ease,
+		filter .15s ease;
+}
+
+.outlay-amount {
+	position: absolute;
+
+	top: 5px;
+	left: 6px;
+
+	font-size: .7rem;
+	font-weight: 600;
+	color: rgb(55, 55, 55);
+
+	user-select: none;
+}
+
+.day-date {
+	font-size: .85rem;
+	font-weight: 300;
+	color: rgb(86, 94, 121);
+
+	user-select: none;
 }
 
 .cell:hover {
-	transform: scale(0.9);
-	filter: drop-shadow(rgb(0, 91, 175) 0.1rem 0.1rem 2px);
+	transform: translateY(-2px);
+	filter: drop-shadow(0 3px 6px rgba(0, 91, 175, .25));
+}
+
+.cell-inactive {
+	opacity: .35;
+	cursor: default;
+}
+
+.cell-inactive:hover {
+	transform: none;
+	filter: none;
 }

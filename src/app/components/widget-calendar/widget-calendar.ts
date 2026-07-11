@@ -18,7 +18,6 @@ export class WidgetCalendar implements OnInit {
 
 	isHR = input<boolean>();
 
-
 	employee = input<EmployeeOutputDto>();  // se il parent cambiasse dipendente senza distruggere e ricreare il componente, 
 											// ngOnInit non verrebbe rieseguito, non basterebbe, dunque bisognerà poi pensare a un effect in futuro
 
@@ -80,6 +79,7 @@ export class WidgetCalendar implements OnInit {
 				outlayAmount: 0,
 				refundAmount: 0,
 			}
+			console.log(cellDate)
 
 			result.push(cell)
 		}
@@ -97,6 +97,7 @@ export class WidgetCalendar implements OnInit {
 				outlayAmount: 0,
 				refundAmount: 0
 			}
+			console.log(cellDate)
 
 			result.push(cell);
 
@@ -116,6 +117,7 @@ export class WidgetCalendar implements OnInit {
 				outlayAmount: 0,
 				refundAmount: 0
 			}
+			console.log(cellDate)
 
 			result.push(cell);
 		}
