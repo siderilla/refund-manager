@@ -1,14 +1,46 @@
-@if (date()) {
-	@if (result().length === 0) {
-		<p>Nessuna spesa in questo giorno</p>
-	} @else {
-		@for (outlay of result(); track outlay.id) {
-			<div class="outlay-detail">
-				{{ outlay.categoryName }}
-				{{ outlay.refundedAmount }}
+<div class="detail-panel">
+	<div class="panel-header">
+		<div class="coin-icon">
+			<i class="fa-solid fa-coins" style="color: rgb(10, 108, 255);"></i>
+		</div>
+		<span>Dettaglio Spese</span>
+	</div>
+
+	<div class="panel-body">
+		@if (date()) {
+		@if (result().length === 0) {
+		<div class="empty-state">
+			<i class="fa-solid fa-calendar-check"></i>
+			<p>Nessuna spesa registrata</p>
+		</div>
+		} @else {
+		<div class="outlay-list">
+			@for (outlay of result(); track outlay.id) {
+			<div class="outlay-card">
+				<div class="card-meta">
+					<span class="category-tag">{{ outlay.categoryName }}</span>
+				</div>
+				<div class="card-values">
+					<div class="value-row type-outlay">
+						<span class="dot"></span>
+						<span class="label">Speso:</span>
+						<span class="val">{{ outlay.amount }}€</span>
+					</div>
+					<div class="value-row type-refund">
+						<span class="dot"></span>
+						<span class="label">Rimborsato:</span>
+						<span class="val">{{ outlay.refundedAmount ?? 0 }}€</span>
+					</div>
+				</div>
 			</div>
+			}
+		</div>
 		}
-	}
-} @else {
-	<p>Seleziona un giorno per vedere i dettagli</p>
-}
+		} @else {
+		<div class="empty-state">
+			<i class="fa-solid fa-hand-pointer"></i>
+			<p>Seleziona un giorno dal calendario</p>
+		</div>
+		}
+	</div>
+</div>

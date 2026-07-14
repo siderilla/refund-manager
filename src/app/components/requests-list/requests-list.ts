@@ -1,5 +1,4 @@
 import { Component, effect, inject, input, OnInit, signal } from '@angular/core';
-import { RequestCard } from "../request-card/request-card";
 import { View as ViewType } from '../../models/view';
 import { EmployeeOutputDto } from '../../models/employee-output';
 import { OutlayService } from '../../services/outlay';
@@ -7,6 +6,7 @@ import { OutlayOutputDto } from '../../models/outlay-output';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import { ColDef } from 'ag-grid-community';
+import { OUTLAY_STATUS } from '../../constants/app-constants';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -77,15 +77,15 @@ export class RequestsList {
 					// che parola c'è dentro questa cella? e ne assegno la classe CSS: 
 					switch (p.value) {
 						case 'In attesa':
-							className = 'status-pending'; // usa la chip gialla nel CSS etc..
+							className = OUTLAY_STATUS.PENDING; // usa la chip gialla nel CSS etc..
 							break;
 
 						case 'Approvata':
-							className = 'status-approved';
+							className = OUTLAY_STATUS.APPROVED;
 							break;
 
 						case 'Rifiutata':
-							className = 'status-rejected';
+							className = OUTLAY_STATUS.REJECTED;
 							break;
 					}
 
@@ -109,55 +109,10 @@ export class RequestsList {
 		if (view === 'my-requests-list') {
 			this.outlayService.getEmployeeOutlays(employeeId).subscribe(data => this.outlays.set(data));
 		} else if (view === 'requests-pending') {
-			this.outlayService.getOutlaysByStatus(['In attesa'], employeeId).subscribe(data => this.outlays.set(data));
+			this.outlayService.getOutlaysByStatus([OUTLAY_STATUS.PENDING], employeeId).subscribe(data => this.outlays.set(data));
 		} else if (view === 'requests-archive') {
-			this.outlayService.getOutlaysByStatus(['Approvata', 'Rifiutata'], employeeId).subscribe(data => this.outlays.set(data));
+			this.outlayService.getOutlaysByStatus([OUTLAY_STATUS.APPROVED, OUTLAY_STATUS.REJECTED], employeeId).subscribe(data => this.outlays.set(data));
 		}
 	}
-
-	// constructor() {
-	// 	effect(() => {
-
-	// 		const view = this.activeView()?.type;
-	// 		const employee = this.employee();
-	// 		const values = ['Approvata', 'Rifiutata'];
-
-	// 		if (!view || !employee) return;
-
-	// 		console.log('view:', view);
-	// 		console.log('employee:', employee);
-
-	// 		if (view === 'my-requests-list') {
-	// 			this.outlayService.getEmployeeOutlays(employee!.id).subscribe({
-	// 				next: (data: any) => {
-	// 					this.outlays.set(data);
-	// 				},
-	// 				error: () => {
-	// 					console.error('Ops, qualcosa è andato storto :(')
-	// 				}
-	// 			})
-	// 		} else if (view === 'requests-pending' && this.isHR()) { // nel dubbio doppio controllo che è HR
-	// 			this.outlayService.getOutlaysByStatus(['In attesa'], employee!.id).subscribe({
-	// 				next: (data: any) => {
-	// 					this.outlays.set(data);
-	// 				},
-	// 				error: () => {
-	// 					console.error('Ops, qualcosa è andato storto :(')
-	// 				}
-	// 			})
-	// 		} else if (view === 'requests-archive' && this.isHR()) {
-	// 			this.outlayService.getOutlaysByStatus(['Approvata', 'Rifiutata'], employee!.id).subscribe({ // o cambio l'endpoint o faccio due volte la chiamata
-	// 				next: (data: any) => {
-	// 					console.log("risposta con values:", data.$values); // ok loop object cycle risolto
-	// 					console.log("risposta senza values:", data);
-	// 					this.outlays.set(data);
-	// 				},
-	// 				error: () => {
-	// 					console.error('Ops, qualcosa è andato storto :(')
-	// 				}
-	// 			})
-	// 		}
-	// 	})
-	// }
 
 }

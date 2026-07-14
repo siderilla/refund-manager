@@ -5,6 +5,7 @@ import { WelcomeName } from "../welcome-name/welcome-name";
 import { Logout } from "../logout/logout";
 import { View as ViewType } from '../../models/view';
 import { RequestView } from '../request-view/request-view';
+import { HR_ROLE } from '../../constants/app-constants';
 
 @Component({
 	selector: 'app-dashboard',
@@ -25,7 +26,7 @@ export class Dashboard implements OnInit {
 	isMobileMenuOpen = signal(false);
 
 	get isHR(): boolean {
-		return this.employee?.role === 'Investigatore privato';
+		return this.employee?.role === HR_ROLE;
 	}
 
 	ngOnInit() {

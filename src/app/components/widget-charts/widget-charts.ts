@@ -3,7 +3,6 @@ import { OutlayService } from '../../services/outlay';
 import { EmployeeOutputDto } from '../../models/employee-output';
 import { DaySummaryDto } from '../../models/day-summary';
 import { CategoryService } from '../../services/category';
-import { CategoryOutputDto } from '../../models/category-output';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -17,11 +16,13 @@ export class WidgetCharts {
 	private outlayService = inject(OutlayService);
 	private categoryService = inject(CategoryService);
 
+	protected readonly Math = Math;
+
 	date = input<string | null>(null);
 	employee = input<EmployeeOutputDto>();
 	daySummary = signal<DaySummaryDto[]>([]);
 	
-	maxOutlayAmount: number = 0;
+	maxAmount: number = 0;
 	maxMonthlyBudget: number = 0;
 
 	constructor() {
@@ -46,8 +47,12 @@ export class WidgetCharts {
 						};
 					});
 					this.daySummary.set(merged);
-					this.maxOutlayAmount = Math.max(...merged.map(mo => mo.outlayAmount));
+
+					const allAmounts = [...merged.map(m => m.outlayAmount), ...merged.map(m => m.refundAmount)];
+					this.maxAmount = Math.max(...allAmounts);
+
 					this.maxMonthlyBudget = Math.max(...categories.map(mmb => mmb.monthlyBudget));
+
 				},
 				error: () => console.error('errore caricamento dati')
 			});
@@ -78,15 +83,14 @@ export class WidgetCharts {
 		
 	}
 
-	// questo metodo verrà rinominato in getPolylinePercent o qualcosa del genere e verrà usato solo per la polyline
-	getBarLength(outlayAmount: number): string { // trasformo tutti gli importi in percentuali
-		if (!outlayAmount || this.maxOutlayAmount === 0) { return "0%"; }
-		const value = (outlayAmount / this.maxOutlayAmount) * 100;
+	getColumnHeight(outlayAmount: number): string { // traduce gli importi in larghezze/altezze proporzionali per il CSS
+		if (!outlayAmount || this.maxAmount === 0) { return "0%"; }
+		const value = (outlayAmount / this.maxAmount) * 100;
 		return value.toString() + "%";
 	}
 
-	getGraphHeight(): number {
-		return this.maxMonthlyBudget;
+	getBudgetRatio() {
+
 	}
 
 }

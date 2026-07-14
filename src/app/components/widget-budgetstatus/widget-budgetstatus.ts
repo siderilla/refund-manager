@@ -17,7 +17,7 @@ export class WidgetBudgetstatus {
 	spentAmount = signal(0);
 	totalBudget = signal(0);
 
-	// spentAmount = input<number>(500);
+	// spentAmount = input<number>(750);
 	// totalBudget = input<number>(1000);
 
 	budgetSummary: CategoryBudgetSummaryDto[] = [];

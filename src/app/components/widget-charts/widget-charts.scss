@@ -1,70 +1,186 @@
 .charts-container {
-	display: flex;
-	flex-direction: column;
-	gap: 16px;
-	padding: 16px;
-	width: 100%;
-	box-sizing: border-box;
-	background-color: #ffffff;
-	border-radius: 8px;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: space-between;
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 8px;
+
+    @media (max-width: 767px) {
+        gap: 12px;
+        padding: 10px 0px;
+    }
 }
 
-.row-wrap {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	width: 100%;
+.side-detail-panel {
+    width: 100%;
+    flex-shrink: 0;
+    margin-top: auto;
+}
 
-	// Su dispositivi molto piccoli, disponiamo etichetta e barra una sopra l'altra
-	@media (max-width: 480px) {
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 4px;
+.main-chart-area {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	flex: 1;
+	height: 450px;
+	gap: 8px;
+
+	@media (max-width: 767px) {
+		height: 280px;
+		justify-content: flex-start;
+		overflow-x: auto;
+		overflow-y: hidden;
+		padding-bottom: 8px;
+		gap: 8px;
+
+		&::-webkit-scrollbar {
+			height: 4px;
+		}
+
+		&::-webkit-scrollbar-track {
+			background: #f1f5f9;
+			border-radius: 4px;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: #cbd5e0;
+			border-radius: 4px;
+		}
 	}
+}
+
+.side-axis {
+	display: flex;
+	flex-direction: column;
+	width: 40px;
+	height: 450px;
+	color: #718096;
+	font-size: 10px;
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+	box-sizing: border-box;
+	flex-shrink: 0;
+
+	@media (max-width: 767px) {
+		width: 28px;
+		font-size: 9px;
+		height: 280px;
+		padding: 0px 1px;
+	}
+}
+
+.axis-ticks-wrapper {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	min-height: 0;
+}
+
+.axis-spacer {
+	height: 21px;
+	flex-shrink: 0;
+
+	@media (max-width: 767px) {
+		height: 32px;
+		/* Compensazione per la scrollbar mobile */
+	}
+}
+
+.axis-left {
+	text-align: right;
+	border-right: 1px solid #e2e8f0;
+	padding-right: 6px;
+
+	@media (max-width: 767px) {
+		padding-right: 3px;
+	}
+}
+
+.column-wrap {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+	min-width: 0;
+	min-height: 0;
+	margin: 0px;
+	padding: 0px;
+
+	@media (max-width: 767px) {
+		gap: 2px;
+		min-width: 35px;
+		// flex-shrink: 0;
+	}
+}
+
+.meta-bottom {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2px;
+	width: 100%;
+	flex-shrink: 0;
 }
 
 .category-label {
-	font-size: 13px;
+	font-size: 11px;
 	font-weight: 500;
 	color: #333333;
-	min-width: 100px;
-	max-width: 120px;
-	text-overflow: ellipsis;
+	text-align: center;
+	width: 100%;
+	line-height: 1.2;
 	overflow: hidden;
 	white-space: nowrap;
-	line-height: 1.2;
-
-	@media (max-width: 480px) {
-		max-width: 100%;
-		min-width: 0;
-	}
+	text-overflow: ellipsis;
 }
 
 .graph-area {
 	flex: 1;
 	display: flex;
-	align-items: center;
-	background-color: rgb(245, 245, 245); // Sfondo della corsia per dare profondità
-	border-radius: 4px;
-	height: 16px; // Spessore della barra fisso e cliccabile/visibile
-	width: 100%;
+	align-items: flex-end;
+	justify-content: center;
+	padding: 0px;
+	width: 60%;
 	overflow: hidden;
+	min-height: 0;
+
+	@media (max-width: 767px) {
+		width: 85%;
+	}
 }
 
-.bar {
+.outlay-column,
+.refund-column {
+	width: 30%;
 	height: 100%;
-	border-radius: 4px;
-	transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-	min-width: 4px; // Un minimo per far vedere che esiste anche se vicino allo 0
+	border-radius: 3px 3px 0 0;
+	transition: height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+	min-width: 4px;
+	flex-shrink: 0;
+	min-height: 4px;
 }
 
-// Stile basato sulla larghezza iniettata (0% vs attivo)
-.bar[style*="width: 0%"],
-.bar[style*="width:0%"] {
-	background-color: rgb(220, 220, 220);
-	min-width: 0;
-}
-
-.bar:not([style*="width: 0%"]):not([style*="width:0%"]) {
+.outlay-column {
 	background-color: rgb(12, 109, 255);
+
+	&[style*="height: 0%"],
+	&[style*="height:0%"] {
+		background-color: rgba(149, 187, 245, 0.637);
+	}
+}
+
+.refund-column {
+	background-color: rgb(122, 226, 192);
+
+	&[style*="height: 0%"],
+	&[style*="height:0%"] {
+		background-color: rgba(181, 245, 224, 0.534);
+	}
 }

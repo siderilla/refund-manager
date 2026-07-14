@@ -1,11 +1,26 @@
 <div class="charts-container">
-	@for (item of daySummary(); track item.categoryName) {
-	<div class="row-wrap">
-		<span class="category-label">{{ item.categoryName }}</span>
-		<div class="graph-area">
-			<div class="bar" [style.width]="getBarLength(item.outlayAmount)"></div> 
-			<!-- larghezza della barra calcolata dal metodo getBarLength e gli passo l'ammontare delle spese -->
+
+	<div class="side-axis axis-left">
+		<div class="axis-ticks-wrapper">
+			<span class="axis-tick">{{ maxAmount }}€</span>
+			<span class="axis-tick">{{ Math.round(maxAmount * 0.66) }}€</span>
+			<span class="axis-tick">{{ Math.round(maxAmount * 0.33) }}€</span>
+			<span class="axis-tick">0€</span>
 		</div>
+		<div class="axis-spacer"></div>
 	</div>
-	}
+
+	<div class="main-chart-area">
+		@for (item of daySummary(); track item.categoryName) {
+		<div class="column-wrap">
+			<div class="graph-area">
+				<div class="outlay-column" [style.height]="getColumnHeight(item.outlayAmount)"></div>
+				<div class="refund-column" [style.height]="getColumnHeight(item.refundAmount)"></div>
+			</div>
+			<div class="meta-bottom">
+				<span class="category-label">{{ item.categoryName }}</span>
+			</div>
+		</div>
+		}
+	</div>
 </div>

@@ -25,7 +25,8 @@ button {
 	cursor: pointer;
 
 	i {
-		color: rgb(12, 109, 255);;
+		color: rgb(12, 109, 255);
+		;
 	}
 
 }
@@ -52,39 +53,62 @@ button {
 
 .cell {
 	position: relative;
-
 	display: flex;
 	align-items: center;
 	justify-content: center;
-
 	aspect-ratio: 1 / 1;
 	width: 100%;
 	border-radius: 4px;
+	transition: transform .15s ease, filter .15s ease;
 
-	transition:
-		transform .15s ease,
-		filter .15s ease;
+	/* COMPORTAMENTO MOBILE/TABLET */
+	@media (max-width: 767px) {
+		flex-direction: column;
+		justify-content: space-between;
+		padding: 4px 2px;
+		box-sizing: border-box;
+	}
 }
 
 .outlay-amount {
 	position: absolute;
-
 	top: 5px;
 	left: 6px;
-
 	font-size: .7rem;
 	font-weight: 600;
 	color: rgb(55, 55, 55);
-
 	user-select: none;
+
+	/* COMPORTAMENTO MOBILE/TABLET */
+	@media (max-width: 767px) {
+		position: static;
+		/* Rimuove il posizionamento assoluto */
+		font-size: 0.58rem;
+		/* Font più piccolo per non sovrapporsi */
+		font-weight: 700;
+		line-height: 1;
+		text-align: center;
+		width: 100%;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 }
 
 .day-date {
 	font-size: .85rem;
 	font-weight: 300;
 	color: rgb(86, 94, 121);
-
 	user-select: none;
+
+	/* COMPORTAMENTO MOBILE/TABLET */
+	@media (max-width: 767px) {
+		font-size: 0.75rem;
+		font-weight: 400;
+		line-height: 1;
+		margin-top: auto;
+		/* Spinge la data in basso se non c'è l'importo */
+	}
 }
 
 .cell:hover {
