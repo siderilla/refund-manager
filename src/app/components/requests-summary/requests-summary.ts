@@ -1,4 +1,4 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
 import { OutlayService } from '../../services/outlay';
 import { EmployeeOutputDto } from '../../models/employee-output';
 import { CategoryBudgetSummaryDto } from '../../models/category-budget-summary';
@@ -9,17 +9,12 @@ import { WidgetOutlaydetail } from '../widget-outlaydetail/widget-outlaydetail';
 
 @Component({
 	selector: 'app-requests-summary',
-	imports: [
-		WidgetBudgetstatus,
-		WidgetCalendar,
-		WidgetCharts,
-		WidgetOutlaydetail
-	],
+	imports: [WidgetBudgetstatus, WidgetCalendar, WidgetCharts, WidgetOutlaydetail],
 	templateUrl: './requests-summary.html',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	styleUrl: './requests-summary.scss',
 })
 export class RequestsSummary {
-
 	private outlayService = inject(OutlayService);
 
 	employee = input<EmployeeOutputDto>();
@@ -28,7 +23,7 @@ export class RequestsSummary {
 	selectedDate = signal<string | null>(null);
 
 	currentCalendarMonth = signal<number>(new Date().getMonth() + 1);
-    currentCalendarYear = signal<number>(new Date().getFullYear());
+	currentCalendarYear = signal<number>(new Date().getFullYear());
 
 	ngOnInit() {
 		this.loadSummary();
@@ -39,9 +34,7 @@ export class RequestsSummary {
 			next: (data) => {
 				this.budgetSummary.set(data);
 			},
-			error: () => console.error('Ops, qualcosa è andato storto :(')
+			error: () => console.error('Ops, qualcosa è andato storto :('),
 		});
 	}
-
-
 }

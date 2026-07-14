@@ -1,25 +1,20 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { EmployeeOutputDto } from '../../models/employee-output';
 import { Sidebar } from '../sidebar/sidebar';
-import { WelcomeName } from "../welcome-name/welcome-name";
-import { Logout } from "../logout/logout";
+import { WelcomeName } from '../welcome-name/welcome-name';
+import { Logout } from '../logout/logout';
 import { View as ViewType } from '../../models/view';
 import { RequestView } from '../request-view/request-view';
 import { HR_ROLE } from '../../constants/app-constants';
 
 @Component({
 	selector: 'app-dashboard',
-	imports: [
-		Sidebar,
-		RequestView,
-		WelcomeName,
-		Logout
-	],
+	imports: [Sidebar, RequestView, WelcomeName, Logout],
 	templateUrl: './dashboard.html',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	styleUrl: './dashboard.scss',
 })
 export class Dashboard implements OnInit {
-
 	employee: EmployeeOutputDto | undefined = undefined;
 	activeView: ViewType | undefined = undefined;
 
@@ -30,17 +25,16 @@ export class Dashboard implements OnInit {
 	}
 
 	ngOnInit() {
-		const data = sessionStorage.getItem('employee'); 
+		const data = sessionStorage.getItem('employee');
 		if (data) {
 			this.employee = JSON.parse(data);
 		}
 
-		this.activeView = { type: 'my-requests-list'}; // la view attiva di default subito dopo il login 
+		this.activeView = { type: 'my-requests-list' }; // la view attiva di default subito dopo il login
 	}
 
 	onViewSelected(event: ViewType) {
 		this.activeView = event;
 		this.isMobileMenuOpen.set(false); // chiude la sidebar su mobile dopo il click
 	}
-
 }

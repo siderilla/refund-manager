@@ -1,4 +1,12 @@
-import { Component, inject, input, OnInit, output, signal } from '@angular/core';
+import {
+	Component,
+	inject,
+	input,
+	OnInit,
+	output,
+	signal,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { CalendarCellDto } from '../../models/calendar-cell';
 import { OutlaySummaryDto } from '../../models/outlay-summary';
 import { OutlayService } from '../../services/outlay';
@@ -9,18 +17,17 @@ import { DateService } from '../../services/date';
 	selector: 'app-widget-calendar',
 	imports: [],
 	templateUrl: './widget-calendar.html',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	styleUrl: './widget-calendar.scss',
 })
 export class WidgetCalendar implements OnInit {
-
 	outlayService = inject(OutlayService);
 	dateService = inject(DateService);
 
 	isHR = input<boolean>();
 
-	employee = input<EmployeeOutputDto>();  // se il parent cambiasse dipendente senza distruggere e ricreare il componente, 
-											// ngOnInit non verrebbe rieseguito, non basterebbe, dunque bisognerà poi pensare a un effect in futuro
-
+	employee = input<EmployeeOutputDto>(); // se il parent cambiasse dipendente senza distruggere e ricreare il componente,
+	// ngOnInit non verrebbe rieseguito, non basterebbe, dunque bisognerà poi pensare a un effect in futuro
 
 	cells = signal<CalendarCellDto[]>([]);
 	summary: OutlaySummaryDto[] = [];
@@ -32,38 +39,45 @@ export class WidgetCalendar implements OnInit {
 
 	displayMonth = this.month + 1;
 	maxOutlayAmount: number = 0;
-	monthChanged = output<{ month: number, year: number }>();
+	monthChanged = output<{ month: number; year: number }>();
 
 	dayNames = ['L', 'M', 'M', 'G', 'V', 'S', 'D'];
-	monthNames = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+	monthNames = [
+		'Gennaio',
+		'Febbraio',
+		'Marzo',
+		'Aprile',
+		'Maggio',
+		'Giugno',
+		'Luglio',
+		'Agosto',
+		'Settembre',
+		'Ottobre',
+		'Novembre',
+		'Dicembre',
+	];
 	monthName: string = this.monthNames[this.month];
 
-
 	ngOnInit() {
-
 		this.fetchData();
-
 	}
 
 	fetchData() {
-
-		this.outlayService.getCalendarSummary(this.employee()!.id,
-			this.displayMonth,
-			this.year,
-			undefined).subscribe({
+		this.outlayService
+			.getCalendarSummary(this.employee()!.id, this.displayMonth, this.year, undefined)
+			.subscribe({
 				next: (data: OutlaySummaryDto[]) => {
 					this.summary = data;
 					this.generateCalendar(this.month, this.year);
 				},
-				error: () => console.error("errore nel caricamento delle celle")
-			})
-
+				error: () => console.error('errore nel caricamento delle celle'),
+			});
 	}
 
 	generateCalendar(month: number, year: number) {
 		const result: CalendarCellDto[] = [];
 
-		const offset = this.dateService.getWeekOffset(year, month) // il primo giorno di maggio diventa 4
+		const offset = this.dateService.getWeekOffset(year, month); // il primo giorno di maggio diventa 4
 		const currentMonthLength = this.dateService.currentMonthLength(year, month);
 
 		// blocco mese precedente
@@ -78,10 +92,10 @@ export class WidgetCalendar implements OnInit {
 				isSelected: false,
 				outlayAmount: 0,
 				refundAmount: 0,
-			}
-			console.log(cellDate)
+			};
+			console.log(cellDate);
 
-			result.push(cell)
+			result.push(cell);
 		}
 
 		// blocco mese corrente
@@ -95,12 +109,11 @@ export class WidgetCalendar implements OnInit {
 				isToday: isToday,
 				isSelected: false,
 				outlayAmount: 0,
-				refundAmount: 0
-			}
-			console.log(cellDate)
+				refundAmount: 0,
+			};
+			console.log(cellDate);
 
 			result.push(cell);
-
 		}
 
 		// blocco mese successivo
@@ -115,86 +128,78 @@ export class WidgetCalendar implements OnInit {
 				isToday: false,
 				isSelected: false,
 				outlayAmount: 0,
-				refundAmount: 0
-			}
-			console.log(cellDate)
+				refundAmount: 0,
+			};
+			console.log(cellDate);
 
 			result.push(cell);
 		}
 
 		this.cells.set(result);
 		this.mergeData(result);
-
 	}
 
 	private mergeData(result: CalendarCellDto[]) {
+		const currentCells = result.filter((c) => c.isCurrentMonth);
 
-		const currentCells = result.filter(c => c.isCurrentMonth);
-
-		currentCells.forEach(cell => {
-			const matchingData = this.summary.find(o => o.date === cell.date);
+		currentCells.forEach((cell) => {
+			const matchingData = this.summary.find((o) => o.date === cell.date);
 
 			if (matchingData?.outlayAmount) {
-				cell.outlayAmount = matchingData.outlayAmount
+				cell.outlayAmount = matchingData.outlayAmount;
 			}
 			if (matchingData?.refundAmount) {
-				cell.refundAmount = matchingData.refundAmount
+				cell.refundAmount = matchingData.refundAmount;
 			}
 		});
 
-		this.maxOutlayAmount = Math.max(...currentCells.map(c => c.outlayAmount));
-
+		this.maxOutlayAmount = Math.max(...currentCells.map((c) => c.outlayAmount));
 	}
 
 	getCellColor(outlayAmount: number, isCurrentMonth: boolean) {
-
-		// se la spesa è 0, ma guardiamo le celle del mese corrente, 
+		// se la spesa è 0, ma guardiamo le celle del mese corrente,
 		// restituisco il colore meno intenso possibile, nella scala del blu scelto
-		if (outlayAmount === 0 && isCurrentMonth) { return "rgb(241, 249, 252)" }
+		if (outlayAmount === 0 && isCurrentMonth) {
+			return 'rgb(241, 249, 252)';
+		}
 
-		// se abbiamo delle spese e guardiamo il mese corrente, 
-		// restituisco una stringa costruita con i valori calcolati in base alla sfumatura 
+		// se abbiamo delle spese e guardiamo il mese corrente,
+		// restituisco una stringa costruita con i valori calcolati in base alla sfumatura
 		// del blu scelto e la percentuale ottenuta dall'ammontare delle spese
 		if (isCurrentMonth) {
+			const value = (outlayAmount / this.maxOutlayAmount) * 100;
+			const scaledValue = 10 + (value * 90) / 100;
 
-			const value = outlayAmount / this.maxOutlayAmount * 100;
-			const scaledValue = 10 + (value * 90 / 100);
+			const r = 255 - (255 * scaledValue) / 100;
+			const g = 255 - ((255 - 172) * scaledValue) / 100;
+			const b = 255 - (0 * scaledValue) / 100;
 
-			const r = 255 - (255 * scaledValue / 100);
-			const g = 255 - ((255 - 172) * scaledValue / 100);
-			const b = 255 - (0 * scaledValue / 100);
-
-			return "rgb(" + r + ", " + g + ", " + b + ")";
-
-		} else { return "rgb(245, 245, 245)"; } // le celle inattive
+			return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+		} else {
+			return 'rgb(245, 245, 245)';
+		} // le celle inattive
 	}
 
 	onChangeMonth(direction: number) {
-
 		this.month += direction;
 		this.displayMonth += direction;
 
 		if (this.month === 12) {
-
 			this.month = 0;
 			this.displayMonth = 1;
 			this.year += 1;
-
 		}
 
 		if (this.month === -1) {
-
 			this.month = 11;
 			this.displayMonth = 12;
 			this.year -= 1;
-
 		}
 
 		this.monthName = this.monthNames[this.month];
 
 		this.monthChanged.emit({ month: this.displayMonth, year: this.year });
 		this.fetchData();
-
 	}
 
 	onCellClick(cell: CalendarCellDto) {
@@ -206,7 +211,6 @@ export class WidgetCalendar implements OnInit {
 	}
 
 	onInactiveCell(result: CalendarCellDto) {
-
 		const toNumberDate = Number(result.date.substring(5, 7));
 
 		if (this.displayMonth - toNumberDate > 0) {
@@ -215,8 +219,5 @@ export class WidgetCalendar implements OnInit {
 		if (this.displayMonth - toNumberDate < 0) {
 			this.onChangeMonth(1);
 		}
-
 	}
-
-
 }

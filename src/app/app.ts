@@ -1,12 +1,13 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.scss',
+	selector: 'app-root',
+	imports: [RouterOutlet],
+	templateUrl: './app.html',
+	changeDetection: ChangeDetectionStrategy.Eager,
+	styleUrl: './app.scss',
 })
 export class App {
-  protected readonly title = signal('refund-manager');
+	protected readonly title = signal('refund-manager');
 }

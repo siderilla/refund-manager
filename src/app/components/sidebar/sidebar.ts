@@ -1,21 +1,17 @@
-import { Component, input, output, signal } from '@angular/core';
-import { EmployeeMenu } from "../employee-menu/employee-menu";
-import { HrMenu } from "../hr-menu/hr-menu";
+import { Component, input, output, signal, ChangeDetectionStrategy } from '@angular/core';
+import { EmployeeMenu } from '../employee-menu/employee-menu';
+import { HrMenu } from '../hr-menu/hr-menu';
 import { View } from '../../models/view';
-import { Logout } from "../logout/logout";
+import { Logout } from '../logout/logout';
 
 @Component({
 	selector: 'app-sidebar',
-	imports: [
-		EmployeeMenu,
-		HrMenu,
-		Logout
-	],
+	imports: [EmployeeMenu, HrMenu, Logout],
 	templateUrl: './sidebar.html',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	styleUrl: './sidebar.scss',
 })
 export class Sidebar {
-
 	isHR = input<boolean>();
 	viewSelected = output<View>();
 	activeView = input<View>();
@@ -23,7 +19,7 @@ export class Sidebar {
 	isCollapsed = signal(window.innerWidth < 992 ? false : true);
 
 	onViewSelected(view: View) {
-		this.viewSelected.emit(view)
+		this.viewSelected.emit(view);
 	}
 
 	onMouseEnter() {
@@ -37,5 +33,4 @@ export class Sidebar {
 			this.isCollapsed.set(true);
 		}
 	}
-
 }

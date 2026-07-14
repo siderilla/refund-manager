@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, signal } from '@angular/core';
+import { Component, effect, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
 import { OutlayService } from '../../services/outlay';
 import { EmployeeOutputDto } from '../../models/employee-output';
 import { CategoryService } from '../../services/category';
@@ -8,19 +8,18 @@ import { OutlayOutputDto } from '../../models/outlay-output';
 	selector: 'app-widget-outlaydetail',
 	imports: [],
 	templateUrl: './widget-outlaydetail.html',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	styleUrl: './widget-outlaydetail.scss',
 })
 export class WidgetOutlaydetail {
-
 	outlayService = inject(OutlayService);
 
 	date = input<string | null>(null);
 	employee = input<EmployeeOutputDto>();
 
 	result = signal<OutlayOutputDto[]>([]);
-	
-	constructor() {
 
+	constructor() {
 		effect(() => {
 			const date = this.date();
 			const employeeId = this.employee()?.id;
@@ -28,13 +27,11 @@ export class WidgetOutlaydetail {
 
 			this.outlayService.getEmployeeOutlays(employeeId).subscribe({
 				next: (data) => {
-					const byDate = data.filter(d => d.date === date);
+					const byDate = data.filter((d) => d.date === date);
 					this.result.set(byDate);
 				},
-				error: () => console.error('errore in result')
+				error: () => console.error('errore in result'),
 			});
-		})
-
+		});
 	}
-
 }
