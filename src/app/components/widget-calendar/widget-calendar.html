@@ -14,7 +14,7 @@
 
 	<div class="cells-container">
 
-		@for (day of dayNames; track day) {
+		@for (day of dayNames; track $index) {
 		<div class="day-header">{{ day }}</div>
 		}
 

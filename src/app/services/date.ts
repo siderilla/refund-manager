@@ -6,16 +6,16 @@ import { Injectable } from '@angular/core';
 export class DateService {
 
 	getWeekOffset(year: number, month: number): number {
-		const firstDayOfMonth = new Date(year, month, 1);
+		const firstDayOfMonth = new Date(year, month - 1, 1);
 		return (firstDayOfMonth.getDay() + 6) % 7;
 	};
 
-	currentMonthLength(year: number, month: number): number {
-		return new Date(year, month + 1, 0).getDate();
+	monthLength(year: number, month: number): number {
+		return new Date(year, month, 0).getDate();
 	};
 
 	isToday(year: number, month: number, day: number): boolean {
-		const dateObj = new Date(year, month, day);
+		const dateObj = new Date(year, month - 1, day);
 		const today = new Date();
 		return dateObj.getDate() == today.getDate() &&
 			dateObj.getMonth() == today.getMonth() &&

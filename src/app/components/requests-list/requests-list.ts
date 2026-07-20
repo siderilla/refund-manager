@@ -22,7 +22,6 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 	selector: 'app-requests-list',
 	imports: [
 		AgGridAngular,
-		// RequestCard,
 	],
 	templateUrl: './requests-list.html',
 	changeDetection: ChangeDetectionStrategy.Eager,
@@ -45,6 +44,12 @@ export class RequestsList {
 		sortable: true,
 		filter: true,
 		floatingFilter: true,
+	};
+
+	private readonly STATUS_CSS_CLASS: Record<string, string> = {
+		[OUTLAY_STATUS.PENDING]: 'status-pending',
+		[OUTLAY_STATUS.APPROVED]: 'status-approved',
+		[OUTLAY_STATUS.REJECTED]: 'status-rejected',
 	};
 
 	constructor() {
@@ -82,29 +87,11 @@ export class RequestsList {
 				field: 'status',
 				headerName: 'Stato',
 
-				// ogni quadrato della tabella è una cella che genero tipo any:
 				cellRenderer: (p: any) => {
-					let className = '';
-
-					// che parola c'è dentro questa cella? e ne assegno la classe CSS:
-					switch (p.value) {
-						case 'In attesa':
-							className = OUTLAY_STATUS.PENDING; // usa la chip gialla nel CSS etc..
-							break;
-
-						case 'Approvata':
-							className = OUTLAY_STATUS.APPROVED;
-							break;
-
-						case 'Rifiutata':
-							className = OUTLAY_STATUS.REJECTED;
-							break;
-					}
-
-					// restituisco l'HTML generato con il className assegnato:
+					const className = this.STATUS_CSS_CLASS[p.value] ?? '';
 					return `<span class="status-chip ${className}">
-					${p.value}
-				</span>`;
+						${p.value}
+					</span>`;
 				},
 			},
 		];

@@ -34,10 +34,11 @@ export class WidgetCalendar implements OnInit {
 
 	cellIsClicked = output<string>();
 
-	month: number = new Date().getMonth();
+	month: number = new Date().getMonth() + 1;
 	year: number = new Date().getFullYear();
 
-	displayMonth = this.month + 1;
+	// displayMonth = this.month + 1; // conversione di frontiera a quanto pare fragile e inutile
+	
 	maxOutlayAmount: number = 0;
 	monthChanged = output<{ month: number; year: number }>();
 
@@ -56,7 +57,7 @@ export class WidgetCalendar implements OnInit {
 		'Novembre',
 		'Dicembre',
 	];
-	monthName: string = this.monthNames[this.month];
+	monthName: string = this.monthNames[this.month - 1];
 
 	ngOnInit() {
 		this.fetchData();
@@ -64,7 +65,7 @@ export class WidgetCalendar implements OnInit {
 
 	fetchData() {
 		this.outlayService
-			.getCalendarSummary(this.employee()!.id, this.displayMonth, this.year, undefined)
+			.getCalendarSummary(this.employee()!.id, this.month, this.year, undefined)
 			.subscribe({
 				next: (data: OutlaySummaryDto[]) => {
 					this.summary = data;
@@ -78,12 +79,13 @@ export class WidgetCalendar implements OnInit {
 		const result: CalendarCellDto[] = [];
 
 		const offset = this.dateService.getWeekOffset(year, month); // il primo giorno di maggio diventa 4
-		const currentMonthLength = this.dateService.currentMonthLength(year, month);
+		const currentMonthLength = this.dateService.monthLength(year, month);
+		const prevMonthLength = this.dateService.monthLength(year, month - 1);
 
 		// blocco mese precedente
 		for (let i = 0; i < offset; i++) {
-			const day = currentMonthLength - offset + i;
-			const cellDate = this.dateService.formatDate(year, this.displayMonth - 1, day + 1);
+			const day = prevMonthLength - offset + i + 1;
+			const cellDate = this.dateService.formatDate(year, this.month - 1, day);
 
 			const cell: CalendarCellDto = {
 				date: cellDate,
@@ -93,14 +95,12 @@ export class WidgetCalendar implements OnInit {
 				outlayAmount: 0,
 				refundAmount: 0,
 			};
-			console.log(cellDate);
-
 			result.push(cell);
 		}
 
 		// blocco mese corrente
 		for (let i = 1; i <= currentMonthLength; i++) {
-			const cellDate = this.dateService.formatDate(year, this.displayMonth, i);
+			const cellDate = this.dateService.formatDate(year, this.month, i);
 			const isToday = this.dateService.isToday(year, month, i);
 
 			const cell: CalendarCellDto = {
@@ -111,8 +111,6 @@ export class WidgetCalendar implements OnInit {
 				outlayAmount: 0,
 				refundAmount: 0,
 			};
-			console.log(cellDate);
-
 			result.push(cell);
 		}
 
@@ -120,7 +118,7 @@ export class WidgetCalendar implements OnInit {
 		const missingCells = 42 - result.length;
 
 		for (let i = 1; i <= missingCells; i++) {
-			const cellDate = this.dateService.formatDate(year, this.displayMonth + 1, i);
+			const cellDate = this.dateService.formatDate(year, this.month + 1, i);
 
 			const cell: CalendarCellDto = {
 				date: cellDate,
@@ -130,13 +128,15 @@ export class WidgetCalendar implements OnInit {
 				outlayAmount: 0,
 				refundAmount: 0,
 			};
-			console.log(cellDate);
-
 			result.push(cell);
 		}
 
 		this.cells.set(result);
 		this.mergeData(result);
+
+		console.log('mese visualizzato', this.month,
+            'lunghezza mese precedente',
+            this.dateService.monthLength(year, month - 1));
 	}
 
 	private mergeData(result: CalendarCellDto[]) {
@@ -180,25 +180,21 @@ export class WidgetCalendar implements OnInit {
 		} // le celle inattive
 	}
 
-	onChangeMonth(direction: number) {
+	onChangeMonth(direction: number) { // questo metodo può sparire se passo a luxon
 		this.month += direction;
-		this.displayMonth += direction;
 
-		if (this.month === 12) {
-			this.month = 0;
-			this.displayMonth = 1;
+		if (this.month === 13) {
+			this.month = 1;
 			this.year += 1;
 		}
 
-		if (this.month === -1) {
-			this.month = 11;
-			this.displayMonth = 12;
+		if (this.month === 0) {
+			this.month = 12;
 			this.year -= 1;
 		}
 
-		this.monthName = this.monthNames[this.month];
-
-		this.monthChanged.emit({ month: this.displayMonth, year: this.year });
+		this.monthName = this.monthNames[this.month - 1];
+		this.monthChanged.emit({ month: this.month, year: this.year });
 		this.fetchData();
 	}
 
@@ -211,12 +207,14 @@ export class WidgetCalendar implements OnInit {
 	}
 
 	onInactiveCell(result: CalendarCellDto) {
-		const toNumberDate = Number(result.date.substring(5, 7));
+		const indexMonth = Number(result.date.substring(5, 7)); // result.date ci da la data del mese corrente
+		console.log("cos'è?", indexMonth, result.date); // potenziale bug che restituisce temporaneamente date sbagliate a cavallo tra gennaio e dicembre ES: 2025-13-01 che dovrebbe essere invece 2026-01-01
+		
 
-		if (this.displayMonth - toNumberDate > 0) {
+		if (this.month - indexMonth > 0) {
 			this.onChangeMonth(-1);
 		}
-		if (this.displayMonth - toNumberDate < 0) {
+		if (this.month - indexMonth < 0) {
 			this.onChangeMonth(1);
 		}
 	}

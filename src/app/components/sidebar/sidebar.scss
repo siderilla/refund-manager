@@ -1,47 +1,10 @@
-// .sidebar-container {
-// 	display: flex;
-// 	flex-direction: column;
-// 	width: 90px;
-// 	height: 100vh;
-// 	background-color: rgb(249, 249, 249);
-// 	border-right: 0.5px rgb(241, 241, 241) solid;
-// 	position: fixed;
-// 	top: 0;
-// 	left: 0;
-// 	z-index: 999;
-// 	overflow: hidden;
-// 	transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
-
-// 	&.expanded {
-// 		width: 300px;
-// 		box-shadow: 10px 0 25px rgba(0, 0, 0, 0.08);
-// 	}
-// }
-
-// .logo {
-// 	margin-top: 20px;
-// 	text-align: center;
-// 	font-size: 50px;
-// 	min-height: 60px;
-// 	display: flex;
-// 	align-items: center;
-// 	justify-content: center;
-// }
-
-// .logout {
-// 	margin-top: auto;
-// 	margin-bottom: 10px;
-// }
-
-
 :host {
-    display: contents; /* Impedisce al tag personalizzato <app-sidebar> di alterare il layout */
+    display: contents;
 }
 
-/* 🟢 FIX ACCORPATO: Quando l'host ha la classe .mobile-open, diciamo alla sidebar di scivolare dentro */
 :host(.mobile-open) {
     .sidebar-container {
-        transform: translateX(0) !important; /* !important di sicurezza contro i conflitti della griglia */
+        transform: translateX(0) !important;
         box-shadow: 10px 0 25px rgba(0, 0, 0, 0.15);
     }
 }
@@ -60,14 +23,12 @@
                 width 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
                 box-shadow 0.3s ease;
 
-    /* --- SPECIFICHE MOBILE (Default) --- */
-    width: 90px; /* Dimensione ideale per un drawer mobile leggibile */
+    width: 90px;
     left: 0;
-    transform: translateX(-100%); /* Spostata completamente a sinistra, invisibile */
+    transform: translateX(-100%);
 
-    /* Quando riceve la classe .mobile-open dall'host component */
     :host(.mobile-open) & {
-        transform: translateX(0); /* Scivola dentro lo schermo */
+        transform: translateX(0);
         box-shadow: 10px 0 25px rgba(0, 0, 0, 0.15);
     }
 }
@@ -87,7 +48,6 @@
     margin-bottom: 10px;
 }
 
-/* --- SPECIFICHE DESKTOP --- */
 @media (min-width: 992px) {
     .sidebar-container {
         width: 90px;

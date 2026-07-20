@@ -1,0 +1,28 @@
+<div class="card" [class.show-employee]="activeView()?.type !== 'my-requests-list'">
+	<div class="category">
+		<p>{{ outlay()?.categoryName }}</p>
+	</div>
+
+	@if (activeView()?.type !== 'my-requests-list') {
+	<div class="employeeFullName">
+		<p>{{ outlay()?.employeeFullName }}</p>
+	</div>
+	}
+
+	<div class="date">
+		<p>{{ outlay()?.date }}</p>
+	</div>
+	<div class="amount">
+		<p>{{ outlay()?.amount }} €</p>
+	</div>
+	<div class="status">
+		<p class="status-chip" [class]="getStatusClass()">
+			{{ outlay()?.status }}
+		</p>
+	</div>
+	<div class="description">
+		@if (outlay()?.description) {
+		<p>{{ outlay()?.description }}</p>
+		}
+	</div>
+</div>

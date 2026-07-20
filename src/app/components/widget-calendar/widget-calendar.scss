@@ -1,10 +1,13 @@
 .cells-header {
 	display: grid;
 	grid-template-columns: 40px 1fr 40px;
-
 	align-items: center;
 	max-width: 250px;
 	margin: 0 auto 10px;
+
+	span {
+		color: #696969;
+	}
 }
 
 .cells-header span {
@@ -63,8 +66,9 @@ button {
 
 	/* COMPORTAMENTO MOBILE/TABLET */
 	@media (max-width: 767px) {
+		position: relative;
 		flex-direction: column;
-		justify-content: space-between;
+		justify-content: center;
 		padding: 4px 2px;
 		box-sizing: border-box;
 	}
@@ -79,15 +83,11 @@ button {
 	color: rgb(55, 55, 55);
 	user-select: none;
 
-	/* COMPORTAMENTO MOBILE/TABLET */
+	/* COMPORTAMENTO MOBILE */
 	@media (max-width: 767px) {
-		position: static;
-		/* Rimuove il posizionamento assoluto */
-		font-size: 0.58rem;
-		/* Font più piccolo per non sovrapporsi */
+		font-size: 0.6rem;
 		font-weight: 700;
 		line-height: 1;
-		text-align: center;
 		width: 100%;
 		white-space: nowrap;
 		overflow: hidden;
@@ -101,13 +101,11 @@ button {
 	color: rgb(86, 94, 121);
 	user-select: none;
 
-	/* COMPORTAMENTO MOBILE/TABLET */
+	/* COMPORTAMENTO MOBILE */
 	@media (max-width: 767px) {
 		font-size: 0.75rem;
 		font-weight: 400;
-		line-height: 1;
-		margin-top: auto;
-		/* Spinge la data in basso se non c'è l'importo */
+		user-select: none;
 	}
 }
 
