@@ -16,6 +16,7 @@ export class WidgetOutlaydetail {
 
 	date = input<string | null>(null);
 	employee = input<EmployeeOutputDto>();
+	isHR = input<boolean>();
 
 	result = signal<OutlayOutputDto[]>([]);
 
@@ -23,9 +24,13 @@ export class WidgetOutlaydetail {
 		effect(() => {
 			const date = this.date();
 			const employeeId = this.employee()?.id;
-			if (!date || !employeeId) return;
+			if (!date) return;
 
-			this.outlayService.getEmployeeOutlays(employeeId).subscribe({
+			const source$ = employeeId
+				? this.outlayService.getEmployeeOutlays(employeeId)
+				: this.outlayService.getOutlaysByDate(date);
+
+			source$.subscribe({
 				next: (data) => {
 					const byDate = data.filter((d) => d.date === date);
 					this.result.set(byDate);

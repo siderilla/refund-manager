@@ -7,5 +7,6 @@ export interface EmployeeOutputDto {
 	mail: string;
 	phone: string;
 	role: string;
+	department?: string;
 
 }

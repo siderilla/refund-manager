@@ -1,4 +1,4 @@
-import { Component, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, input, signal, ChangeDetectionStrategy, computed } from '@angular/core';
 import { OutlayService } from '../../services/outlay';
 import { EmployeeOutputDto } from '../../models/employee-output';
 import { CategoryBudgetSummaryDto } from '../../models/category-budget-summary';
@@ -22,6 +22,11 @@ export class RequestsSummary {
 
 	budgetSummary = signal<CategoryBudgetSummaryDto[]>([]);
 	selectedDate = signal<string | null>(null);
+	selectedEmployee = signal<EmployeeOutputDto | undefined>(undefined);
+
+	employeeFilter = computed(() =>
+		this.isHR() ? this.selectedEmployee() : this.employee()
+	);
 
 	currentCalendarMonth = signal<number>(new Date().getMonth() + 1);
 	currentCalendarYear = signal<number>(new Date().getFullYear());

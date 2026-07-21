@@ -2,10 +2,10 @@ import {
 	Component,
 	inject,
 	input,
-	OnInit,
 	output,
 	signal,
 	ChangeDetectionStrategy,
+	effect,
 } from '@angular/core';
 import { CalendarCellDto } from '../../models/calendar-cell';
 import { OutlaySummaryDto } from '../../models/outlay-summary';
@@ -20,7 +20,7 @@ import { DateService } from '../../services/date';
 	changeDetection: ChangeDetectionStrategy.Eager,
 	styleUrl: './widget-calendar.scss',
 })
-export class WidgetCalendar implements OnInit {
+export class WidgetCalendar {
 	outlayService = inject(OutlayService);
 	dateService = inject(DateService);
 
@@ -38,7 +38,7 @@ export class WidgetCalendar implements OnInit {
 	year: number = new Date().getFullYear();
 
 	// displayMonth = this.month + 1; // conversione di frontiera a quanto pare fragile e inutile
-	
+
 	maxOutlayAmount: number = 0;
 	monthChanged = output<{ month: number; year: number }>();
 
@@ -59,13 +59,16 @@ export class WidgetCalendar implements OnInit {
 	];
 	monthName: string = this.monthNames[this.month - 1];
 
-	ngOnInit() {
-		this.fetchData();
+	constructor() {
+		effect(() => {
+			this.fetchData();
+		});
+
 	}
 
 	fetchData() {
 		this.outlayService
-			.getCalendarSummary(this.employee()!.id, this.month, this.year, undefined)
+			.getCalendarSummary(this.month, this.year, this.employee()?.id, undefined)
 			.subscribe({
 				next: (data: OutlaySummaryDto[]) => {
 					this.summary = data;
@@ -135,8 +138,8 @@ export class WidgetCalendar implements OnInit {
 		this.mergeData(result);
 
 		console.log('mese visualizzato', this.month,
-            'lunghezza mese precedente',
-            this.dateService.monthLength(year, month - 1));
+			'lunghezza mese precedente',
+			this.dateService.monthLength(year, month - 1));
 	}
 
 	private mergeData(result: CalendarCellDto[]) {
@@ -209,7 +212,7 @@ export class WidgetCalendar implements OnInit {
 	onInactiveCell(result: CalendarCellDto) {
 		const indexMonth = Number(result.date.substring(5, 7)); // result.date ci da la data del mese corrente
 		console.log("cos'è?", indexMonth, result.date); // potenziale bug che restituisce temporaneamente date sbagliate a cavallo tra gennaio e dicembre ES: 2025-13-01 che dovrebbe essere invece 2026-01-01
-		
+
 
 		if (this.month - indexMonth > 0) {
 			this.onChangeMonth(-1);

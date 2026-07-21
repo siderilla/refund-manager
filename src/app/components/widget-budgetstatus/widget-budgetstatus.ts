@@ -38,6 +38,7 @@ export class WidgetBudgetstatus {
 	private outlayService = inject(OutlayService);
 
 	employee = input<EmployeeOutputDto>();
+	isHR = input<boolean>();
 
 	displayMonth = input.required<number>();
 	year = input.required<number>();

@@ -3,25 +3,32 @@
         <app-widget-budgetstatus
             [employee]="employee()"
             [displayMonth]="currentCalendarMonth()"
-            [year]="currentCalendarYear()">
+            [year]="currentCalendarYear()"
+			[isHR]="isHR()">
         </app-widget-budgetstatus>
     </div>
     <div class="area-calendar">
         <app-widget-calendar
             [employee]="employee()"
             (cellIsClicked)="selectedDate.set($event)"
-            (monthChanged)="currentCalendarMonth.set($event.month); currentCalendarYear.set($event.year)">
+            (monthChanged)="currentCalendarMonth.set($event.month); currentCalendarYear.set($event.year)"
+			[isHR]="isHR()"
+			[employee]="employeeFilter()">
         </app-widget-calendar>
     </div>
 	<div class="area-charts">
 		<app-widget-charts
-		[date]="selectedDate()"
-		[employee]="employee()"></app-widget-charts>
+			[date]="selectedDate()"
+			[employee]="employeeFilter()"
+			[isHR]="isHR()">
+		</app-widget-charts>
 
 		<div class="area-detail">
 			<app-widget-outlaydetail
-			[date]="selectedDate()"
-			[employee]="employee()"></app-widget-outlaydetail>
+				[date]="selectedDate()"
+				[employee]="employee()"
+				[isHR]="isHR()">
+			</app-widget-outlaydetail>
 		</div>
 		
 	</div>

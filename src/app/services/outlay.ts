@@ -35,8 +35,9 @@ export class OutlayService {
 		return this.http.get<CategoryBudgetSummaryDto[]>(`${this.baseUrl}/Outlays/budget-summary`, { params });
 	}
 
-	getCalendarSummary(employeeId: string, month: number, year: number, department?: string): Observable<CalendarCellDto[]> {
-		let params: any = { employeeId, month, year };
+	getCalendarSummary(month: number, year: number, employeeId?: string, department?: string): Observable<CalendarCellDto[]> {
+		let params: any = { month, year };
+		if (employeeId) params.employeeId = employeeId;
 		if (department) params.department = department;
 
 		return this.http.get<CalendarCellDto[]>(`${this.baseUrl}/Outlays/calendar-summary`, { params });
@@ -53,4 +54,12 @@ export class OutlayService {
 	createOutlay(employeeId: string, outlay: OutlayInputDto): Observable<any> {
 		return this.http.post<OutlayInputDto>(`${this.baseUrl}/Outlays/from-employee?employeeId=${employeeId}`, outlay)
 	}
+
+	getOutlaysByDate(date: string, department?: string): Observable<OutlayOutputDto[]> {
+		const params: any = { date };
+		if (department) params.department = department;
+
+		return this.http.get<OutlayOutputDto[]>(`${this.baseUrl}/Outlays/by-date`, { params });
+	}
+
 }

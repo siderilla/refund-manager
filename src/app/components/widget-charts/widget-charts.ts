@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, effect, inject, input, signal, ChangeDetectionStrategy, computed } from '@angular/core';
 import { OutlayService } from '../../services/outlay';
 import { EmployeeOutputDto } from '../../models/employee-output';
 import { DaySummaryDto } from '../../models/day-summary';
@@ -20,6 +20,9 @@ export class WidgetCharts {
 
 	date = input<string | null>(null);
 	employee = input<EmployeeOutputDto>();
+	isHR = input<boolean>();
+
+
 	daySummary = signal<DaySummaryDto[]>([]);
 
 	maxAmount: number = 0;
@@ -29,7 +32,7 @@ export class WidgetCharts {
 		effect(() => {
 			const date = this.date();
 			const employeeId = this.employee()?.id;
-			if (!date || !employeeId) return;
+			if (!date) return;
 
 			forkJoin({
 				categories: this.categoryService.getCategories(),
@@ -69,5 +72,5 @@ export class WidgetCharts {
 		return value.toString() + '%';
 	}
 
-	getBudgetRatio() {}
+	getBudgetRatio() { }
 }
