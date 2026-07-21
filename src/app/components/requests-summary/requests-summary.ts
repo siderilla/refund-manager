@@ -18,6 +18,7 @@ export class RequestsSummary {
 	private outlayService = inject(OutlayService);
 
 	employee = input<EmployeeOutputDto>();
+	isHR = input<boolean>();
 
 	budgetSummary = signal<CategoryBudgetSummaryDto[]>([]);
 	selectedDate = signal<string | null>(null);

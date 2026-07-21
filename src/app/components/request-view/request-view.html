@@ -35,7 +35,8 @@
 } @else if (activeView()?.type === 'requests-analytics') {
 
 	<app-requests-summary
-		[employee]="employee()">
+		[employee]="employee()"
+		[isHR]="isHR()">
 	</app-requests-summary>
 
 }
