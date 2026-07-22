@@ -18,6 +18,9 @@
 			@for (outlay of result(); track outlay.id) {
 			<div class="outlay-card">
 				<div class="card-meta">
+					@if (outlay.employeeFullName) {
+						<span class="employee-tag">{{ outlay.employeeFullName }}</span>
+					}
 					<span class="category-tag">{{ outlay.categoryName }}</span>
 				</div>
 				<div class="card-values">
