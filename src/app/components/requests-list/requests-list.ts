@@ -10,6 +10,7 @@ import {
 import { View as ViewType } from '../../models/view';
 import { EmployeeOutputDto } from '../../models/employee-output';
 import { OutlayService } from '../../services/outlay';
+import { RefundService } from '../../services/refund';
 import { OutlayOutputDto } from '../../models/outlay-output';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
@@ -29,6 +30,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 })
 export class RequestsList {
 	outlayService = inject(OutlayService);
+	refundService = inject(RefundService);
 
 	activeView = input<ViewType>();
 	employee = input<EmployeeOutputDto>();
@@ -101,7 +103,33 @@ export class RequestsList {
 			columns.unshift({ field: 'employeeFullName', headerName: 'Dipendente' });
 		}
 
+		// solo sulle richieste in attesa, e solo per HR: aggiungi i bottoni approva/rifiuta
+		if (view === 'requests-pending' && this.isHR()) {
+			columns.push({
+				field: 'actions',
+				headerName: 'Azioni',
+				sortable: false,
+				filter: false,
+				cellRenderer: (p: any) => `
+					<button class="action-btn approve-btn" data-action="approve" data-id="${p.data.id}">Approva</button>
+					<button class="action-btn reject-btn" data-action="reject" data-id="${p.data.id}">Rifiuta</button>
+				`,
+			});
+		}
+
 		this.colDefs = columns;
+	}
+
+	onCellClicked(event: any) {
+		const action = event.event.target?.dataset?.action;
+		if (!action) return;
+
+		const outlayId = event.event.target.dataset.id;
+		const isApproved = action === 'approve';
+
+		this.refundService.processRefund(outlayId, isApproved).subscribe(() => {
+			this.loadData(this.activeView()!.type, this.employee()!.id);
+		});
 	}
 
 	private loadData(view: string, employeeId: string) {

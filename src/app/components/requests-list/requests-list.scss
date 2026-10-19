@@ -50,5 +50,34 @@
 			color: #c62877;
 			border: 1px solid #c6287f;
 		}
+
+		.action-btn {
+			border: none;
+			border-radius: 6px;
+			padding: 4px 10px;
+			margin-right: 6px;
+			font-size: 12px;
+			cursor: pointer;
+		}
+
+		.approve-btn {
+			background-color: #dff5e8;
+			color: #0a8f5c;
+		}
+
+		.approve-btn:hover {
+			background-color: #0a8f5c;
+			color: white;
+		}
+
+		.reject-btn {
+			background-color: #fde4e7;
+			color: #c62877;
+		}
+
+		.reject-btn:hover {
+			background-color: #c62877;
+			color: white;
+		}
 	}
 }
