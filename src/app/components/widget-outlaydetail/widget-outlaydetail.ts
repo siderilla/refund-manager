@@ -35,7 +35,7 @@ export class WidgetOutlaydetail {
 					const byDate = data.filter((d) => d.date === date);
 					this.result.set(byDate);
 				},
-				error: () => console.error('errore in result'),
+				error: () => console.error('error loading result'),
 			});
 		});
 	}

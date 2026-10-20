@@ -69,25 +69,25 @@ export class RequestsList {
 		const columns: ColDef[] = [
 			{
 				field: 'date',
-				headerName: 'Data',
+				headerName: 'Date',
 				valueFormatter: (p) => new Date(p.value).toLocaleDateString(),
 			},
-			{ field: 'categoryName', headerName: 'Categoria' },
-			{ field: 'amount', headerName: 'Importo Spesa', valueFormatter: (p) => p.value + ' €' },
+			{ field: 'categoryName', headerName: 'Category' },
+			{ field: 'amount', headerName: 'Expense Amount', valueFormatter: (p) => p.value + ' €' },
 			{
 				field: 'refundedAmount',
-				headerName: 'Importo Rimborso',
-				valueFormatter: (p) => (p.value != null ? `${p.value} €` : '---'), //potrebbe essere utile un toFixed() perché nel mondo reale non esistono cifre tonde...
+				headerName: 'Refund Amount',
+				valueFormatter: (p) => (p.value != null ? `${p.value} €` : '---'), // a toFixed() might be useful here, because in the real world amounts are rarely round numbers...
 			},
 			{
 				field: 'description',
-				headerName: 'Note',
-				tooltipField: 'description', // mostra il testo completo se passa sopra col mouse
+				headerName: 'Notes',
+				tooltipField: 'description', // shows the full text on mouse hover
 				minWidth: 200,
 			},
 			{
 				field: 'status',
-				headerName: 'Stato',
+				headerName: 'Status',
 
 				cellRenderer: (p: any) => {
 					const className = this.STATUS_CSS_CLASS[p.value] ?? '';
@@ -98,21 +98,21 @@ export class RequestsList {
 			},
 		];
 
-		// nelle aree HR aggiungi AL PRIMO della lista la colonna nome dipendente:
+		// in HR areas add the employee name column FIRST in the list:
 		if (view.includes('requests-pending') || view.includes('requests-archive')) {
-			columns.unshift({ field: 'employeeFullName', headerName: 'Dipendente' });
+			columns.unshift({ field: 'employeeFullName', headerName: 'Employee' });
 		}
 
-		// solo sulle richieste in attesa, e solo per HR: aggiungi i bottoni approva/rifiuta
+		// only on pending requests, and only for HR: add the approve/reject buttons
 		if (view === 'requests-pending' && this.isHR()) {
 			columns.push({
 				field: 'actions',
-				headerName: 'Azioni',
+				headerName: 'Actions',
 				sortable: false,
 				filter: false,
 				cellRenderer: (p: any) => `
-					<button class="action-btn approve-btn" data-action="approve" data-id="${p.data.id}">Approva</button>
-					<button class="action-btn reject-btn" data-action="reject" data-id="${p.data.id}">Rifiuta</button>
+					<button class="action-btn approve-btn" data-action="approve" data-id="${p.data.id}">Approve</button>
+					<button class="action-btn reject-btn" data-action="reject" data-id="${p.data.id}">Reject</button>
 				`,
 			});
 		}

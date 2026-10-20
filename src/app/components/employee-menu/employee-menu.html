@@ -1,20 +1,20 @@
 <div class="container-employee-menu" [class.collapsed]="collapsed()">
-	<h4>Area Personale</h4>
+	<h4>My Area</h4>
 	<button (click)="onMenuClick('my-requests-list')"
 		[class.active]="currentActive() === 'my-requests-list'">
 		<i class="fa-solid fa-list"></i>
-		<p>Le mie richieste</p>
+		<p>My Requests</p>
 	</button>
 
 	<button (click)="onMenuClick('request-form')"
 	[class.active]="currentActive() === 'request-form'">
 		<i class="fa-solid fa-plus"></i>
-		<p>Nuova richiesta</p>
+		<p>New Request</p>
 	</button>
 
 	<button (click)="onMenuClick('my-requests-summary')"
 	[class.active]="currentActive() === 'my-requests-summary'">
 		<i class="fa-solid fa-chart-pie"></i>
-		<p>Riepilogo</p>
+		<p>Summary</p>
 	</button>
 </div>

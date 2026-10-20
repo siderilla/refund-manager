@@ -3,7 +3,7 @@
 		<div class="coin-icon">
 			<i class="fa-solid fa-coins" style="color: rgb(10, 108, 255);"></i>
 		</div>
-		<span>Dettaglio Spese</span>
+		<span>Expense Details</span>
 	</div>
 
 	<div class="panel-body">
@@ -11,7 +11,7 @@
 		@if (result().length === 0) {
 		<div class="empty-state">
 			<i class="fa-solid fa-calendar-check"></i>
-			<p>Nessuna spesa registrata</p>
+			<p>No expenses recorded</p>
 		</div>
 		} @else {
 		<div class="outlay-list">
@@ -26,12 +26,12 @@
 				<div class="card-values">
 					<div class="value-row type-outlay">
 						<span class="dot"></span>
-						<span class="label">Speso:</span>
+						<span class="label">Spent:</span>
 						<span class="val">{{ outlay.amount }}€</span>
 					</div>
 					<div class="value-row type-refund">
 						<span class="dot"></span>
-						<span class="label">Rimborsato:</span>
+						<span class="label">Refunded:</span>
 						<span class="val">{{ outlay.refundedAmount ?? 0 }}€</span>
 					</div>
 				</div>
@@ -41,7 +41,7 @@
 		}
 		} @else {
 		<div class="empty-state">
-			<p>Seleziona un giorno dal calendario</p>
+			<p>Select a day from the calendar</p>
 		</div>
 		}
 	</div>

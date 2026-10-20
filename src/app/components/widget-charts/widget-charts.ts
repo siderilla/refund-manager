@@ -43,7 +43,7 @@ export class WidgetCharts {
 						const match = summary.find((s) => s.categoryName === cat.name);
 						return {
 							categoryName: cat.name,
-							outlayAmount: match?.outlayAmount ?? 0, // se c'è usalo, altrimenti == 0
+							outlayAmount: match?.outlayAmount ?? 0, // use it if present, otherwise == 0
 							refundAmount: match?.refundAmount ?? 0,
 							dailyBudget: cat.dailyBudget,
 						};
@@ -58,13 +58,13 @@ export class WidgetCharts {
 
 					this.maxMonthlyBudget = Math.max(...categories.map((mmb) => mmb.monthlyBudget));
 				},
-				error: () => console.error('errore caricamento dati'),
+				error: () => console.error('error loading data'),
 			});
 		});
 	}
 
 	getColumnHeight(outlayAmount: number): string {
-		// traduce gli importi in larghezze/altezze proporzionali per il CSS
+		// converts amounts into proportional widths/heights for the CSS
 		if (!outlayAmount || this.maxAmount === 0) {
 			return '0%';
 		}

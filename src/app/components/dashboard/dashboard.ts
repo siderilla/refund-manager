@@ -30,11 +30,11 @@ export class Dashboard implements OnInit {
 			this.employee = JSON.parse(data);
 		}
 
-		this.activeView = { type: 'my-requests-list' }; // la view attiva di default subito dopo il login
+		this.activeView = { type: 'my-requests-list' }; // the default active view right after login
 	}
 
 	onViewSelected(event: ViewType) {
 		this.activeView = event;
-		this.isMobileMenuOpen.set(false); // chiude la sidebar su mobile dopo il click
+		this.isMobileMenuOpen.set(false); // closes the sidebar on mobile after the click
 	}
 }

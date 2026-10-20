@@ -40,7 +40,7 @@ export class RequestsSummary {
 			next: (data) => {
 				this.budgetSummary.set(data);
 			},
-			error: () => console.error('Ops, qualcosa è andato storto :('),
+			error: () => console.error('Oops, something went wrong :('),
 		});
 	}
 }

@@ -17,12 +17,12 @@ export class Home {
 	onLogin(auth: { name: string; surname: string }) {
 		this.employeeService.getEmployeeByName(auth.name, auth.surname).subscribe({
 			next: (employee) => {
-				console.log('Accesso riuscito!');
+				console.log('Login successful!');
 				sessionStorage.setItem('employee', JSON.stringify(employee));
 				this.router.navigate(['/dashboard']);
 			},
 			error: () => {
-				console.error('Accesso negato');
+				console.error('Access denied');
 			},
 		});
 	}

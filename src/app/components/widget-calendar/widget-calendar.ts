@@ -26,8 +26,8 @@ export class WidgetCalendar {
 
 	isHR = input<boolean>();
 
-	employee = input<EmployeeOutputDto>(); // se il parent cambiasse dipendente senza distruggere e ricreare il componente,
-	// ngOnInit non verrebbe rieseguito, non basterebbe, dunque bisognerà poi pensare a un effect in futuro
+	employee = input<EmployeeOutputDto>(); // if the parent changed employee without destroying and recreating the component,
+	// ngOnInit wouldn't rerun, so that wouldn't be enough - will need to think about an effect for this later
 
 	cells = signal<CalendarCellDto[]>([]);
 	summary: OutlaySummaryDto[] = [];
@@ -42,20 +42,20 @@ export class WidgetCalendar {
 	maxOutlayAmount: number = 0;
 	monthChanged = output<{ month: number; year: number }>();
 
-	dayNames = ['L', 'M', 'M', 'G', 'V', 'S', 'D'];
+	dayNames = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 	monthNames = [
-		'Gennaio',
-		'Febbraio',
-		'Marzo',
-		'Aprile',
-		'Maggio',
-		'Giugno',
-		'Luglio',
-		'Agosto',
-		'Settembre',
-		'Ottobre',
-		'Novembre',
-		'Dicembre',
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December',
 	];
 	monthName: string = this.monthNames[this.month - 1];
 
@@ -74,18 +74,18 @@ export class WidgetCalendar {
 					this.summary = data;
 					this.generateCalendar(this.month, this.year);
 				},
-				error: () => console.error('errore nel caricamento delle celle'),
+				error: () => console.error('error loading calendar cells'),
 			});
 	}
 
 	generateCalendar(month: number, year: number) {
 		const result: CalendarCellDto[] = [];
 
-		const offset = this.dateService.getWeekOffset(year, month); // il primo giorno di maggio diventa 4
+		const offset = this.dateService.getWeekOffset(year, month); // the first day of May becomes 4
 		const currentMonthLength = this.dateService.monthLength(year, month);
 		const prevMonthLength = this.dateService.monthLength(year, month - 1);
 
-		// blocco mese precedente
+		// previous month block
 		for (let i = 0; i < offset; i++) {
 			const day = prevMonthLength - offset + i + 1;
 			const cellDate = this.dateService.formatDate(year, this.month - 1, day);
@@ -101,7 +101,7 @@ export class WidgetCalendar {
 			result.push(cell);
 		}
 
-		// blocco mese corrente
+		// current month block
 		for (let i = 1; i <= currentMonthLength; i++) {
 			const cellDate = this.dateService.formatDate(year, this.month, i);
 			const isToday = this.dateService.isToday(year, month, i);
@@ -117,7 +117,7 @@ export class WidgetCalendar {
 			result.push(cell);
 		}
 
-		// blocco mese successivo
+		// next month block
 		const missingCells = 42 - result.length;
 
 		for (let i = 1; i <= missingCells; i++) {
@@ -137,8 +137,8 @@ export class WidgetCalendar {
 		this.cells.set(result);
 		this.mergeData(result);
 
-		console.log('mese visualizzato', this.month,
-			'lunghezza mese precedente',
+		console.log('displayed month', this.month,
+			'previous month length',
 			this.dateService.monthLength(year, month - 1));
 	}
 
@@ -160,15 +160,15 @@ export class WidgetCalendar {
 	}
 
 	getCellColor(outlayAmount: number, isCurrentMonth: boolean) {
-		// se la spesa è 0, ma guardiamo le celle del mese corrente,
-		// restituisco il colore meno intenso possibile, nella scala del blu scelto
+		// if the expense is 0, but we're looking at the current month's cells,
+		// return the least intense color possible, on the chosen blue scale
 		if (outlayAmount === 0 && isCurrentMonth) {
 			return 'rgb(241, 249, 252)';
 		}
 
-		// se abbiamo delle spese e guardiamo il mese corrente,
-		// restituisco una stringa costruita con i valori calcolati in base alla sfumatura
-		// del blu scelto e la percentuale ottenuta dall'ammontare delle spese
+		// if we have expenses and we're looking at the current month,
+		// return a string built from values calculated based on the shade
+		// of the chosen blue and the percentage obtained from the expense amount
 		if (isCurrentMonth) {
 			const value = (outlayAmount / this.maxOutlayAmount) * 100;
 			const scaledValue = 10 + (value * 90) / 100;
@@ -180,10 +180,10 @@ export class WidgetCalendar {
 			return 'rgb(' + r + ', ' + g + ', ' + b + ')';
 		} else {
 			return 'rgb(245, 245, 245)';
-		} // le celle inattive
+		} // inactive cells
 	}
 
-	onChangeMonth(direction: number) { // questo metodo può sparire se passo a luxon
+	onChangeMonth(direction: number) { // this method could go away if I switch to luxon
 		this.month += direction;
 
 		if (this.month === 13) {
@@ -210,8 +210,8 @@ export class WidgetCalendar {
 	}
 
 	onInactiveCell(result: CalendarCellDto) {
-		const indexMonth = Number(result.date.substring(5, 7)); // result.date ci da la data del mese corrente
-		console.log("cos'è?", indexMonth, result.date); // potenziale bug che restituisce temporaneamente date sbagliate a cavallo tra gennaio e dicembre ES: 2025-13-01 che dovrebbe essere invece 2026-01-01
+		const indexMonth = Number(result.date.substring(5, 7)); // result.date gives us the current month's date
+		console.log("what is it?", indexMonth, result.date); // potential bug that temporarily returns wrong dates across the January/December boundary E.G.: 2025-13-01 which should instead be 2026-01-01
 
 
 		if (this.month - indexMonth > 0) {

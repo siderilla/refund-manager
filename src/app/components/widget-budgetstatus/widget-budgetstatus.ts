@@ -50,18 +50,18 @@ export class WidgetBudgetstatus {
 
 	displayPercentage = signal(0);
 	monthNames = [
-		'Gennaio',
-		'Febbraio',
-		'Marzo',
-		'Aprile',
-		'Maggio',
-		'Giugno',
-		'Luglio',
-		'Agosto',
-		'Settembre',
-		'Ottobre',
-		'Novembre',
-		'Dicembre',
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December',
 	];
 	monthName = computed(() => this.monthNames[this.displayMonth() - 1]);
 
@@ -83,7 +83,7 @@ export class WidgetBudgetstatus {
 							this.displayPercentage.set(this.percentage());
 						}, 50);
 					},
-					error: () => console.error('Errore budget'),
+					error: () => console.error('Budget error'),
 				});
 			}
 		});

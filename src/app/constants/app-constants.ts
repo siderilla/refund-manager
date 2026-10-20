@@ -1,7 +1,7 @@
-export const HR_ROLE = 'Investigatore privato';
+export const HR_ROLE = 'HR Manager';
 
 export const OUTLAY_STATUS = {
-	PENDING: 'In attesa',
-	APPROVED: 'Approvata',
-	REJECTED: 'Rifiutata'
+	PENDING: 'Pending',
+	APPROVED: 'Approved',
+	REJECTED: 'Rejected'
 } as const;

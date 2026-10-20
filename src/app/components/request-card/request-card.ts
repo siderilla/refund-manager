@@ -18,9 +18,9 @@ export class RequestCard {
 		if (!status) return '';
 
 		switch (status) {
-            case 'Approvata': return 'status-approved';
-            case 'In attesa': return 'status-pending';
-            case 'Rifiutata': return 'status-rejected';
+            case 'Approved': return 'status-approved';
+            case 'Pending': return 'status-pending';
+            case 'Rejected': return 'status-rejected';
             default: return '';
         }
 	}

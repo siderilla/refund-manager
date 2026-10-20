@@ -20,8 +20,8 @@ import { OutlayInputDto } from '../../models/outlay-input';
 	styleUrl: './request-form.scss',
 })
 export class RequestForm {
-	private outlayService = inject(OutlayService); // per fare la post
-	private categoryService = inject(CategoryService); // per chiamare le categorie
+	private outlayService = inject(OutlayService); // to do the post
+	private categoryService = inject(CategoryService); // to call the categories
 	private fb = inject(FormBuilder);
 
 	categories = signal<CategoryOutputDto[]>([]);
@@ -43,7 +43,7 @@ export class RequestForm {
 				const list = data;
 				this.categories.set(list);
 			},
-			error: () => console.error('Errore nel caricamento categorie'),
+			error: () => console.error('Error loading categories'),
 		});
 	}
 
@@ -52,15 +52,15 @@ export class RequestForm {
 		const employee = this.employee();
 
 		if (this.outlayForm.invalid || !employee) return;
-		console.log('la form si riempie?', newOutlay);
+		console.log('form value:', newOutlay);
 		this.outlayService.createOutlay(employee!.id, newOutlay).subscribe({
 			next: (data: any) => {
-				console.log('Risposta dal server:', data);
+				console.log('Server response:', data);
 				this.outlayForm.reset({ receipt: false });
 			},
 
 			error: () => {
-				console.error('Qualcosa è andato storto');
+				console.error('Something went wrong');
 			},
 		});
 	}
