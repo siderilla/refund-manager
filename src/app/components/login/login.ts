@@ -9,11 +9,12 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 	styleUrl: './login.scss',
 })
 export class Login {
-	submitData = output<{ name: string; surname: string }>();
+	submitData = output<{ name: string; surname: string; password: string }>();
 
 	loginForm = new FormGroup({
 		name: new FormControl('', [Validators.required]),
 		surname: new FormControl('', [Validators.required]),
+		password: new FormControl('', [Validators.required]),
 	});
 
 	onSubmitAuth() {
@@ -21,7 +22,8 @@ export class Login {
 
 		const name = this.loginForm.value.name!;
 		const surname = this.loginForm.value.surname!;
+		const password = this.loginForm.value.password!;
 
-		this.submitData.emit({ name, surname });
+		this.submitData.emit({ name, surname, password });
 	}
 }

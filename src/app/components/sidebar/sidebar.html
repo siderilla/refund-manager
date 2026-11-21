@@ -11,7 +11,7 @@
 	<app-employee-menu
 		[collapsed]="isCollapsed()"
 		(viewSelected)="onViewSelected($event)"
-		[currentActive]="$safeNavigationMigration(activeView()?.type)"
+		[currentActive]="activeView()?.type"
 	>
 	</app-employee-menu>
 
@@ -19,7 +19,7 @@
 		<app-hr-menu
 			[collapsed]="isCollapsed()"
 			(viewSelected)="onViewSelected($event)"
-			[currentActive]="$safeNavigationMigration(activeView()?.type)"
+			[currentActive]="activeView()?.type"
 		>
 		</app-hr-menu>
 	}

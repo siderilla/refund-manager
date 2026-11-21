@@ -1,6 +1,6 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Login } from '../login/login';
-import { EmployeeService } from '../../services/employee';
+import { AuthService } from '../../services/auth';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,12 +12,13 @@ import { Router } from '@angular/router';
 })
 export class Home {
 	private router = inject(Router);
-	employeeService = inject(EmployeeService);
+	authService = inject(AuthService);
 
-	onLogin(auth: { name: string; surname: string }) {
-		this.employeeService.getEmployeeByName(auth.name, auth.surname).subscribe({
-			next: (employee) => {
+	onLogin(auth: { name: string; surname: string; password: string }) {
+		this.authService.login(auth.name, auth.surname, auth.password).subscribe({
+			next: ({ token, employee }) => {
 				console.log('Login successful!');
+				sessionStorage.setItem('token', token);
 				sessionStorage.setItem('employee', JSON.stringify(employee));
 				this.router.navigate(['/dashboard']);
 			},

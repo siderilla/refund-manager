@@ -6,6 +6,7 @@ import { OutlayInputDto } from '../models/outlay-input';
 import { CategoryBudgetSummaryDto } from '../models/category-budget-summary';
 import { CalendarCellDto } from '../models/calendar-cell';
 import { DaySummaryDto } from '../models/day-summary';
+import { environment } from '../../environments/environment';
 
 @Injectable({
 	providedIn: 'root',
@@ -13,7 +14,7 @@ import { DaySummaryDto } from '../models/day-summary';
 export class OutlayService {
 
 	private http = inject(HttpClient);
-	private baseUrl = 'https://localhost:7258/api';
+	private baseUrl = environment.apiUrl;
 
 	getEmployeeOutlays(employeeId: string): Observable<OutlayOutputDto[]> {
 		return this.http.get<OutlayOutputDto[]>(
@@ -51,8 +52,8 @@ export class OutlayService {
 		return this.http.get<DaySummaryDto[]>(`${this.baseUrl}/Outlays/day-summary`, { params });
 	}
 
-	createOutlay(employeeId: string, outlay: OutlayInputDto): Observable<any> {
-		return this.http.post<OutlayInputDto>(`${this.baseUrl}/Outlays/from-employee?employeeId=${employeeId}`, outlay)
+	createOutlay(outlay: OutlayInputDto): Observable<any> {
+		return this.http.post<OutlayInputDto>(`${this.baseUrl}/Outlays/from-employee`, outlay)
 	}
 
 	getOutlaysByDate(date: string, department?: string): Observable<OutlayOutputDto[]> {

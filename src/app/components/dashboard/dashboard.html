@@ -3,7 +3,7 @@
 		<i class="fa-solid fa-bars"></i>
 	</button>
 
-	<app-welcome-name class="welcome-name" [userName]="$safeNavigationMigration(employee?.name)">
+	<app-welcome-name class="welcome-name" [userName]="employee?.name">
 	</app-welcome-name>
 
 	<app-logout class="logout"> </app-logout>

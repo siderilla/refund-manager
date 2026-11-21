@@ -49,11 +49,10 @@ export class RequestForm {
 
 	onSubmit() {
 		const newOutlay = this.outlayForm.value;
-		const employee = this.employee();
 
-		if (this.outlayForm.invalid || !employee) return;
+		if (this.outlayForm.invalid) return;
 		console.log('form value:', newOutlay);
-		this.outlayService.createOutlay(employee!.id, newOutlay).subscribe({
+		this.outlayService.createOutlay(newOutlay).subscribe({
 			next: (data: any) => {
 				console.log('Server response:', data);
 				this.outlayForm.reset({ receipt: false });
